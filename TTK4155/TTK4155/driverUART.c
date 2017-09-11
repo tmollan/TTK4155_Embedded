@@ -1,6 +1,7 @@
 
-#include "driverUART.h"
+//#include "driverUART.h"
 #include <avr/io.h>
+#include <stdio.h>
 
 
 void UART_Init(unsigned int ubrr) {
@@ -25,7 +26,7 @@ void UART_Transmit(unsigned char data, FILE *stream) {
 
 	// For printf() functionality
 	if (data == '\n')
-		USART_Transmit('\r', stream);
+		UART_Transmit('\r', stream);
 
 	// Put data into buffer, sends the data
 	UDR0 = data;

@@ -17,7 +17,7 @@ int main(void) {
 
 	// Initialize UART communication
 	UART_Init(MYUBRR);
-	printf("UART is up and running!");
+	printf("UART is up and running!\n");
 
     while(1) {
 
