@@ -53,5 +53,9 @@ dkms.conf
 
 # Debug and temporaries
 Debug/
+<<<<<<< HEAD
 
 
+=======
+.DS_Store
+>>>>>>> 3e0440cdec5b488058cb718c59f82d9f6c58af96
