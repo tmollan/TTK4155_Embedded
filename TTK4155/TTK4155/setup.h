@@ -20,8 +20,8 @@ The file also contains some functions that might come in handy.
 #define setBit(reg, bit) (reg |= (1 << bit))      // Set bit in reg. (rest as is)
 #define clearBit(reg, bit) (reg &= ~(1 << bit))   // Clear bit in reg. (rest as is)
 #define testBit(reg, bit) (reg & (1 << bit))      // 1 if set, 0 if clear
-#define loopUntilSet(reg, bit) while(!test_bit(reg, bit))   // Loops if bit is 0
-#define loopUntilClear(reg, bit) while(test_bit(reg, bit))  // Loops if bit is 1
+#define loopUntilSet(reg, bit) while(!testBit(reg, bit))   // Loops if bit is 0
+#define loopUntilClear(reg, bit) while(testBit(reg, bit))  // Loops if bit is 1
 
 
 #endif /* SETUP_H_ */

@@ -1,8 +1,4 @@
-/*
 
-driverUART.h
-
-*/
 
 #ifndef DRIVERUART_H_
 #define DRIVERUART_H_

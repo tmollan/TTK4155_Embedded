@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Atmel Studio Solution File, Format Version 11.00
-Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "TTK4155", "TTK4155\TTK4155.cproj", "{A46341BC-4517-499B-9DF9-8713C2E8EDFE}"
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "proj", "TTK4155\proj.cproj", "{A46341BC-4517-499B-9DF9-8713C2E8EDFE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{40FC7E2A-5CEF-433B-A5E2-5D6E3FB09025}"
 EndProject
