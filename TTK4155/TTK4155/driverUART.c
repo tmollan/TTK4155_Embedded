@@ -1,51 +1,40 @@
 
-//#include "driverUART.h"
-#include "setup.h"
-#include <avr/io.h>
-#include <stdio.h>
+// Includes
+#include "setup.h"				// For setBit(), loopUntilSet(), etc..
+#include <avr/io.h>				// For use of defined AVR registers and bits
+#include <stdio.h>				// For FILE variable and printf()
 
 
-void UART_Init(unsigned int ubrr) {
+// Initializes UART interface
+void initUART(unsigned int ubrr) {
 	// Sets baud rate
 	UBRR0H = (unsigned char)(ubrr>>8);
 	UBRR0L = (unsigned char)ubrr;
 
 	// Enable receiver and transmitter
-	//UCSR0B = (1 << RXEN0) | (1 << TXEN0);
 	setBit(UCSR0B, RXEN0);		// Receiver
 	setBit(UCSR0B, TXEN0);		// Transmitter
 
 	// Set frame format: 8data, 2stop bit
 	UCSR0C = (1 << URSEL0) | (1 << USBS0) | (3 << UCSZ00);
+
+	printf("UART is up and running!\n\n");
 }
 
 
-void UART_Transmit(unsigned char data, FILE *stream) {
-	// Wait for empty transmit buffer
-	//while (!(UCSR0A & (1<<UDRE0)));
-	loopUntilSet(UCSR0A, UDRE0);
-
-	// For printf() functionality
-	if (data == '\n')
-		UART_Transmit('\r', stream);
-
-	// Put data into buffer, sends the data
-	UDR0 = data;
+// Transmits data to UART by writing to UART Data Register (UDR0)
+void transmitUART(unsigned char data, FILE *stream) {
+	// For printf(): force adds a carriage return after newline
+	if (data == '\n') {
+		transmitUART('\r', stream);
+	}
+	loopUntilSet(UCSR0A, UDRE0);		// Wait until register is empty
+	UDR0 = data;						// Put new data into register
 }
 
 
-unsigned char UART_Receive(void) {
-	// Wait for data to be received
-	//while (!(UCSR0A & (1<<RXC0)));
-	loopUntilSet(UCSR0A, RXC0);
-
-	// Get and return received data from buffer
-	return UDR0;
+// Receives data from UART by reading UART Data Register (UDR0)
+unsigned char receiveUART(void/* FILE *stream */) {
+	loopUntilSet(UCSR0A, RXC0);			// Wait for data to be received
+	return UDR0;						// Return received data from register
 }
-
-/*
-void UART_Flush(void) {
-	unsigned char dummy;
-	while (UCSR0A & (1 << RXC0))
-	dummy = UDR0;
-}*/

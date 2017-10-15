@@ -1,5 +1,7 @@
 /*
 
+setup.h
+
 This file sets some important variables.
 The file also contains some functions that might come in handy.
 
@@ -22,6 +24,8 @@ The file also contains some functions that might come in handy.
 #define testBit(reg, bit) (reg & (1 << bit))      // 1 if set, 0 if clear
 #define loopUntilSet(reg, bit) while(!testBit(reg, bit))   // Loops if bit is 0
 #define loopUntilClear(reg, bit) while(testBit(reg, bit))  // Loops if bit is 1
+#define makeInput(reg, pin) clearBit(reg, pin)    // Sets pin to be input
+#define makeOutput(reg, pin) setBit(reg, pin)     // Sets pin to be output
 
 
 #endif /* SETUP_H_ */
