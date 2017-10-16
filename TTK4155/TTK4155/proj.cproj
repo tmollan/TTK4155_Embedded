@@ -118,6 +118,18 @@
     <Compile Include="animations.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="CAN.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="CAN.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="CANctrl.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="CANctrl.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="driverUART.c">
       <SubType>compile</SubType>
     </Compile>
@@ -155,6 +167,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="setup.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="SPI.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="SPI.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="SRAM.c">
