@@ -41,25 +41,23 @@ int main(void) {
 
 	menupage *currentMenu = malloc(sizeof(menupage));
 	initMenu(&currentMenu);
-	
+
 	initSPI();
-	//resetCAN();
-	writeSPI(0xC0);
-	_delay_ms(10);
-	writeCAN(CANCTRL_REG_ADDR, 0x00);
-	
 	//initCAN();
-	
+
+	/*
+	// CAN test
 	CANmessage myMessage;
 	myMessage.id = 0x05;
 	myMessage.length = 0x07;
-	for (int i = 0; i < 7; i++) {
+	for (int i = 1; i < 8; i++) {
 		myMessage.bytes[i] = i;
 	}
-	//transmitCAN(myMessage);
-	//CANmessage recMessage = receiveCAN();
-	//printf("ID: %d\nlength: %d\n", recMessage.id, recMessage.length);
-	
+	transmitCAN(myMessage);
+	CANmessage recMessage = receiveCAN();
+	printf("ID: %d\nlength: %d\n", recMessage.id, recMessage.length);
+	*/
+
 	/*
 	// For read- and write-test of SRAM
 	uint16_t address = 0x000;			// 0x000-0x800 (2048 addresses)
@@ -85,11 +83,12 @@ int main(void) {
 	*/
 
 	while(1) {
-		clearBit(PORTB, PINB4);
-		writeSPI(0xAA);
-		uint8_t data = readSPI();
+		selectSlave();
+		transmitSPI(0xAA);
+		uint8_t data = transmitSPI(DUMMY);
 		printf("%d\n", data);
-		
+		releaseSlave();
+
 		if (menuMode) {
 			navigateMenu(&currentMenu);
 
