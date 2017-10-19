@@ -28,7 +28,7 @@ uint8_t readCAN(uint8_t address) {
 uint8_t readStatusCAN(void) {
 	selectSlave();
 	transmitSPI(READSTATUS_INST);			// Read status instruction
-	uint8_t status = transmitSPI(DUMMY);		// Reads status
+	uint8_t status = transmitSPI(DUMMY);	// Reads status
 	releaseSlave();
 	return status;
 }
@@ -64,6 +64,7 @@ void resetCAN(void) {
 
 
 // Self test
+/*
 uint8_t selfTestCAN(void) {
 	uint8_t error = 0;
 	uint8_t status = readCAN(CANSTAT);
@@ -76,4 +77,4 @@ uint8_t selfTestCAN(void) {
 	}
 
 	return error;
-}
+}*/

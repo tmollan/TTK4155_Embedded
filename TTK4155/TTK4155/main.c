@@ -43,20 +43,22 @@ int main(void) {
 	initMenu(&currentMenu);
 
 	initSPI();
-	//initCAN();
+	initCAN();
 
-	/*
 	// CAN test
 	CANmessage myMessage;
-	myMessage.id = 0x05;
+	myMessage.id = 0x05DB;
 	myMessage.length = 0x07;
-	for (int i = 1; i < 8; i++) {
-		myMessage.bytes[i] = i;
+	for (int i = 0, n = 1; i < myMessage.length; i++, n++) {
+		myMessage.dataBytes[i] = n;
 	}
 	transmitCAN(myMessage);
 	CANmessage recMessage = receiveCAN();
-	printf("ID: %d\nlength: %d\n", recMessage.id, recMessage.length);
-	*/
+	_delay_ms(1);
+	printf("ID: %2x\nlength: %d\n", recMessage.id, recMessage.length);
+	for (int i = 0; i < recMessage.length; i++) {
+		printf("%d", recMessage.dataBytes[i]);
+	}
 
 	/*
 	// For read- and write-test of SRAM
@@ -83,11 +85,17 @@ int main(void) {
 	*/
 
 	while(1) {
-		selectSlave();
-		transmitSPI(0xAA);
-		uint8_t data = transmitSPI(DUMMY);
-		printf("%d\n", data);
-		releaseSlave();
+		/*
+		resetCAN();
+		uint8_t status = readCAN(0x0E);
+		printf("Status before:%2x\n", status);
+		writeCAN(0x0f,0x40);
+		status = readCAN(0x01);
+		printf("Status after:%2x\n", status);
+		
+		_delay_ms(500);
+		*/
+		
 
 		if (menuMode) {
 			navigateMenu(&currentMenu);

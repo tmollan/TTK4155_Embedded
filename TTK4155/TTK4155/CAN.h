@@ -36,6 +36,8 @@ CAN.h
 #define RXM0_HIGH 0x60			// Turns mask/filters off, receives any message
 #define RXB0SIDH 0x61			// Standard identifier register high
 #define RXB0SIDL 0x62			// Standard identifier register low
+#define RXB0EIDH 0x63			// Standard identifier register high
+#define RXB0EIDL 0x64			// Standard identifier register low
 #define RXB0DLC 0x65			// Data length code register
 #define RXB0D 0x66				// Data byte register (0x66-6D)
 

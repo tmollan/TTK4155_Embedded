@@ -9,6 +9,7 @@ SPI.h
 
 // SPI includes
 #include "setup.h"		// For makeInput/-Output, setBit and loopUntilSet
+#include <avr/io.h>
 #include <stdint.h>		// For uint8_t
 
 
