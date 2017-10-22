@@ -1,8 +1,6 @@
 
 // Includes
-#include "setup.h"				// For setBit(), loopUntilSet(), etc..
-#include <avr/io.h>				// For use of defined AVR registers and bits
-#include <stdio.h>				// For FILE variable and printf()
+#include "driverUART.h"
 
 
 // Initializes UART interface
@@ -18,7 +16,7 @@ void initUART(unsigned int ubrr) {
 	// Set frame format: 8data, 2stop bit
 	UCSR0C = (1 << URSEL0) | (1 << USBS0) | (3 << UCSZ00);
 
-	printf("UART is up and running!\n\n");
+	printf("Initializing...\nUART communication running\n");
 }
 
 

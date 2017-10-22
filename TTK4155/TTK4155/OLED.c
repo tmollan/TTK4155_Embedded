@@ -1,17 +1,6 @@
 
 // Includes
-#include <stdint.h>
-#include <stdio.h>			// For printf()
-#include <stdlib.h>
-#include <math.h>
-#include <util/delay.h>
-#include <string.h>
 #include "OLED.h"
-#include "fonts.h"
-#include "animations.h"
-#include "joystick.h"
-#include "SRAM.h"
-#include "menu.h"
 
 
 // Global variables
@@ -68,10 +57,12 @@ void initOLED(void) {
 	writeCommandOLED(0xA6);	// Set normal/inverse display (0xA6/0xA7)
 	writeCommandOLED(0xAF);	// Display ON (normal mode)
 
-	changeFont(NORMAL);
+	setFont(FONT_NORMAL);
 	clearDisplayOLED();
 	clearDisplaySRAM();
 	resetCursor();
+
+	printf("OLED display ON\n");
 }
 
 // Write command to change settings on OLED
@@ -192,13 +183,13 @@ void drawCharSRAM(char ch, uint16_t address) {
 	for (int8_t col = 0; col < fontWidth; col++) {
 		uint8_t data = 0x00;
 		switch (currentFont) {
-			case BIG:
+			case FONT_BIG:
 				data = pgm_read_byte(&font8[(int8_t)ch][col]);
 				break;
-			case NORMAL:
+			case FONT_NORMAL:
 				data = pgm_read_byte(&font5[(int8_t)ch][col]);
 				break;
-			case SMALL:
+			case FONT_SMALL:
 				data = pgm_read_byte(&font4[(int8_t)ch][col]);
 				break;
 		}
@@ -235,13 +226,13 @@ void drawInvCharSRAM(char ch, uint16_t address) {
 	for (int8_t col = 0; col < fontWidth; col++) {
 		uint8_t data = 0x00;
 		switch (currentFont) {
-			case BIG:
+			case FONT_BIG:
 				data = ~pgm_read_byte(&font8[(int8_t)ch][col]);		// ~: inverts bits
 				break;
-			case NORMAL:
+			case FONT_NORMAL:
 				data = ~pgm_read_byte(&font5[(int8_t)ch][col]);
 				break;
-			case SMALL:
+			case FONT_SMALL:
 				data = ~pgm_read_byte(&font4[(int8_t)ch][col]);
 				break;
 		}
@@ -276,7 +267,7 @@ void drawInvStringSRAM(char *string, uint16_t address) {
 void drawPixelSRAM(uint8_t x, uint8_t y) {
 	if (x < 128 && y < 64) {
 		y = 63 - y;
-		uint16_t address = y/8*128 + x;			// page = y/8
+		uint16_t address = y/8*128 + x;		// page = y/8
 		uint8_t data = readSRAM(address);
 		data |= (1 << y%8);
 		writeSRAM(address, data);
@@ -355,17 +346,17 @@ void drawJoystickSRAM(void) {
 		/*// Square movements
 		switch (js.dir) {
 			case RIGHT:
-			incCursorX();
-			break;
+				incCursorX();
+				break;
 			case UP:
-			incCursorY();
-			break;
+				incCursorY();
+				break;
 			case LEFT:
-			decCursorX();
-			break;
+				decCursorX();
+				break;
 			case DOWN:
-			decCursorY();
-			break;
+				decCursorY();
+				break;
 		}*/
 
 		drawPixelSRAM(cursor.xPos, cursor.yPos);
@@ -437,19 +428,29 @@ void drawCheckMark(void) {
 	_delay_ms(5000);
 }
 
+/*
+void drawStartScreen(void) {
+	for (int16_t i = 0; i < 1024; i++) {
+		uint8_t data = pgm_read_byte(&startscreen[i]);
+		writeSRAM(i, pgm_read_byte(&BitReversalTable256[data]));
+	}
+	refreshOLED();
+}
+*/
+
 // Changes the global font and fontWidth
-void changeFont(font size) {
+void setFont(font size) {
 	switch (size) {
-		case BIG:
-			currentFont = BIG;
+		case FONT_BIG:
+			currentFont = FONT_BIG;
 			fontWidth = 8;
 			break;
-		case NORMAL:
-			currentFont = NORMAL;
+		case FONT_NORMAL:
+			currentFont = FONT_NORMAL;
 			fontWidth = 5;
 			break;
-		case SMALL:
-			currentFont = SMALL;
+		case FONT_SMALL:
+			currentFont = FONT_SMALL;
 			fontWidth = 4;
 			break;
 	}

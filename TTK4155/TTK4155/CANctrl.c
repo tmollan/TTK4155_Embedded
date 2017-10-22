@@ -59,22 +59,43 @@ void resetCAN(void) {
 	selectSlave();
 	transmitSPI(RESET_INST);		// Reset instruction
 	releaseSlave();
-	//_delay_ms(10);
+	_delay_ms(1);
 }
 
 
-// Self test
-/*
-uint8_t selfTestCAN(void) {
-	uint8_t error = 0;
-	uint8_t status = readCAN(CANSTAT);
-	if () {
-		printf("CAN controller is NOT in config. mode after reset!\n");
-	}
-	if ((value & MODE_MASK) != MODE_CONFIG) {
-		UART_print("MCP2515 is NOT in configuration mode after reset!");
-		return 1;
-	}
+uint8_t getModeCAN(void) {
+	return readCAN(CANSTAT) & MODE_MASK;
+}
 
-	return error;
-}*/
+void setModeCAN(uint8_t mode) {
+	modifyBitCAN(CANCTRL, MODE_MASK, mode);
+}
+
+// Check if CAN is in mode
+uint8_t inModeCAN(uint8_t mode) {
+	uint8_t currentMode = getModeCAN();
+	if (currentMode != mode) {
+		switch (mode) {
+			case MODE_NORMAL:
+				printf("CAN is NOT in Normal Operation mode: CANSTAT = 0x%.2x\n");
+				break;
+			case MODE_SLEEP:
+				printf("CAN is NOT in Sleep mode: CANSTAT = 0x%.2x\n");
+				break;
+			case MODE_LOOPBACK:
+				printf("CAN is NOT in Loopback mode: CANSTAT = 0x%.2x\n");
+				break;
+			case MODE_LISTENONLY:
+				printf("CAN is NOT in Listen-only mode: CANSTAT = 0x%.2x\n");
+				break;
+			case MODE_CONFIG:
+				printf("CAN is NOT in Configuration mode: CANSTAT = 0x%.2x\n");
+				break;
+			case MODE_POWERUP:
+				printf("CAN is NOT in Power-up mode: CANSTAT = 0x%.2x\n");
+				break;
+		}
+		return 0;
+	}
+	return 1;
+}

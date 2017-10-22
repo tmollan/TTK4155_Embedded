@@ -1,15 +1,6 @@
 
 // Includes
-#include "setup.h"				// For setBit(), makeInput(), etc..
-#include <avr/io.h>				// For use of defined AVR registers and bits
-#include <stdint.h>				// For uint8_t, uint16_t, etc..
-#include <stdio.h>				// For printf()
-#include <math.h>				// For atan2() (?) and M_PI (?)
-#include <util/delay.h>
-#include "joystick.h"			// For enum, structs and defines
-#include "ADC.h"					// For readADC()
-#include "EEPROM.h"				// For read- and writeEEPROM()
-#include "OLED.h"
+#include "joystick.h"
 
 
 // Channels for reading data from USB multifunction card
@@ -36,10 +27,11 @@ void initJoystick(void) {
 
 	// Checks if joystick has been calibrated
 	if (readEEPROM(EEAJOYINIT) == 0x01) {
-		getParameters();				// Gets joystick parameters
+		getParameters();		// Gets joystick parameters
 	} else {
-		calibrateJoystick();		// Calibrates joystick
+		calibrateJoystick();	// Calibrates joystick
 	}
+	printf("Joystick calibrated\n");
 }
 
 
@@ -113,7 +105,7 @@ sliders getSliders(void) {
 int8_t buttonPressed(button b) {
 	switch (b) {
 		case JOYSTICK:
-			return !testBit(PINB, PINB0);		// Joystick is normally closed
+			return !testBit(PINB, PINB0);	// Joystick is normally closed
 		case LEFTBUTTON:
 			return testBit(PINB, PINB1);
 		case RIGHTBUTTON:
@@ -125,8 +117,8 @@ int8_t buttonPressed(button b) {
 
 
 void calibrateJoystick(void) {
+	printf("Calibrating joystick\n");
 	// Reads center position 100 times and finds average
-	printf("Calibrating joystick center, do not touch!\n");
 	int xTemp = 0, yTemp = 0;
 	for (int8_t i = 0; i < 100; i++) {
 		xTemp += readADC(XCH);		// x-pos. of neutral joystick
@@ -134,14 +126,17 @@ void calibrateJoystick(void) {
 	}
 	xMidPos = xTemp/100;
 	yMidPos = yTemp/100;
-	printf("Joystick center calibrated at:\n(x, y) = (%d, %d)\n\n", xMidPos, yMidPos);
 
 	// Calibrates the max and min positions
 	printf("Please move joystick slowly in a full circle to calibrate axes.\nPress the joystick down when done.\n");
+
+	int8_t tempFont = currentFont;
+	setFont(FONT_NORMAL);
 	char *string = "Calibrating joystick!\nMove joystick around, and press down when done.";
 	uint16_t address = posAddressSRAM(1, 0);
 	drawStringSRAM(string, address);
 	refreshOLED();
+	setFont(tempFont);
 
 	while(!buttonPressed(JOYSTICK)) {
 		uint8_t xPos = readADC(XCH);
@@ -152,25 +147,24 @@ void calibrateJoystick(void) {
 		if (yPos > yMax) yMax = yPos;
 		if (yPos < yMin) yMin = yPos;
 	}
-	printf("Joystick calibrated:\nx-range: %d-%d\ny-range: %d-%d\n\n", xMin, xMax, yMin, yMax);
 
 	// Writes obtained parameters to EEPROM
-	writeEEPROM(EEAXMAX, xMax);			// Maximum value of x
-	writeEEPROM(EEAXMIN, xMin);			// Minimum value of x
+	writeEEPROM(EEAXMAX, xMax);		// Maximum value of x
+	writeEEPROM(EEAXMIN, xMin);		// Minimum value of x
 	writeEEPROM(EEAXMID, xMidPos);	// Center value of x
-	writeEEPROM(EEAYMAX, yMax);			// Maximum value of y
-	writeEEPROM(EEAYMIN, yMin);			// Minimum value of y
+	writeEEPROM(EEAYMAX, yMax);		// Maximum value of y
+	writeEEPROM(EEAYMIN, yMin);		// Minimum value of y
 	writeEEPROM(EEAYMID, yMidPos);	// Center value of y
 	writeEEPROM(EEAJOYINIT, 0x01);	// Indicate that joystick has been calibrated
-	printf("Joystick calibrated - parameters saved to EEPROM\n");
+	printf("Joystick parameters saved to EEPROM\n");
 }
 
 // Gets parameters from EEPROM when joystick already has been calibrated
 void getParameters(void) {
-	xMax = readEEPROM(EEAXMAX);			// Maximum value of x
-	xMin = readEEPROM(EEAXMIN);			// Minimum value of x
+	xMax = readEEPROM(EEAXMAX);		// Maximum value of x
+	xMin = readEEPROM(EEAXMIN);		// Minimum value of x
 	xMidPos = readEEPROM(EEAXMID);	// Center value of x
-	yMax = readEEPROM(EEAYMAX);			// Maximum value of y
-	yMin = readEEPROM(EEAYMIN);			// Minimum value of y
+	yMax = readEEPROM(EEAYMAX);		// Maximum value of y
+	yMin = readEEPROM(EEAYMIN);		// Minimum value of y
 	yMidPos = readEEPROM(EEAYMID);	// Center value of y
 }

@@ -8,26 +8,40 @@ OLED.h
 #ifndef OLED_H_
 #define OLED_H_
 
+// Includes
 #include <stdint.h>
+#include <stdio.h>			// For printf()
+#include <stdlib.h>
+#include <math.h>
+#include <util/delay.h>
+#include <string.h>
+#include "fonts.h"
+#include "animations.h"
+#include "joystick.h"
+#include "SRAM.h"
+#include "menu.h"
 
+// Global variables
 extern volatile struct positionOLED cursor;
 extern volatile int8_t currentFont;
 extern volatile int8_t fontWidth;
 
+// Typedefs
 // For remembering positions
 typedef struct positionOLED {
-  uint8_t xPos;   // 0-127
-  uint8_t yPos;   // 0-63
-  uint8_t page;   // 0-7
-  uint8_t column; // 0-127
+    uint8_t xPos;   // 0-127
+    uint8_t yPos;   // 0-63
+    uint8_t page;   // 0-7
+    uint8_t column; // 0-127
 } positionOLED;
 
 typedef enum {
-	BIG,
-	NORMAL,
-	SMALL
+	FONT_BIG,
+	FONT_NORMAL,
+	FONT_SMALL
 } font;
 
+// Functions
 // Initializes OLED
 void initOLED(void);
 
@@ -79,8 +93,9 @@ void setCursor(uint8_t page, uint8_t column);
 
 // Animates a check mark
 void drawCheckMark(void);
+//void drawStartScreen(void);
 
 // Changes the global font
-void changeFont(font size);
+void setFont(font size);
 
 #endif /* OLED_H_ */

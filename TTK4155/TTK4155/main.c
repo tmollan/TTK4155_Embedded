@@ -30,10 +30,12 @@ int main(void) {
 	stdout = &mystdout;		// Redirect stdout to UART
 	stdin = &mystdin;		// Redirect stdin to UART
 
+	printf("Initializing...\n");
+
 	initUART(MYUBRR);		// Initializes UART communication
 
 	initSRAM();				// Initializes extern SRAM
-	testSRAM();				// Verifies that SRAM IC is working properly
+	//testSRAM();				// Verifies that SRAM IC is working properly
 
 	initJoystick();			// Initialize (and calibrate) joystick
 
@@ -42,23 +44,7 @@ int main(void) {
 	menupage *currentMenu = malloc(sizeof(menupage));
 	initMenu(&currentMenu);
 
-	initSPI();
-	initCAN();
-
-	// CAN test
-	CANmessage myMessage;
-	myMessage.id = 0x05DB;
-	myMessage.length = 0x07;
-	for (int i = 0, n = 1; i < myMessage.length; i++, n++) {
-		myMessage.dataBytes[i] = n;
-	}
-	transmitCAN(myMessage);
-	CANmessage recMessage = receiveCAN();
-	_delay_ms(1);
-	printf("ID: %2x\nlength: %d\n", recMessage.id, recMessage.length);
-	for (int i = 0; i < recMessage.length; i++) {
-		printf("%d", recMessage.dataBytes[i]);
-	}
+	initCAN(MODE_LOOPBACK);
 
 	/*
 	// For read- and write-test of SRAM
@@ -71,31 +57,26 @@ int main(void) {
 	sliders mySliders;
 	*/
 
-	/*
-	drawCircleSRAM(63, 31, 10);
-	drawCircleSRAM(63, 31, 20);
-	drawCircleSRAM(63, 31, 30);
-	drawCircleSRAM(63, 31, 40);
-	drawCircleSRAM(63, 31, 50);
-	drawCircleSRAM(63, 31, 60);
-	drawLineSRAM(0, 31, 127, 31);
-	drawLineSRAM(63, 0, 63, 63);
-	//drawInvStringSRAM("Hello world!\nHow are you?\nFine, thanks", 0x00);
-	refreshOLED();
-	*/
+
+	// CAN test
+	CANmessage myMessage;
+	myMessage.id = 0x0123;		// Max 0x07ef
+	myMessage.length = 5;
+	for (int i = 0, n = 1; i < myMessage.length; i++, n++) {
+		myMessage.dataBytes[i] = n;
+	}
+
+	printf("Before transmit:\nID: %.4x\nlength: %d\n", myMessage.id, myMessage.length);
+	transmitCAN(myMessage);
+	CANmessage recMessage = receiveCAN();
+	printf("After transmit:\nID: %.4x\nlength: %d\n", recMessage.id, recMessage.length);
+
+	for (int i = 0; i < recMessage.length; i++) {
+		printf("%d", recMessage.dataBytes[i]);
+	}
+
 
 	while(1) {
-		/*
-		resetCAN();
-		uint8_t status = readCAN(0x0E);
-		printf("Status before:%2x\n", status);
-		writeCAN(0x0f,0x40);
-		status = readCAN(0x01);
-		printf("Status after:%2x\n", status);
-		
-		_delay_ms(500);
-		*/
-		
 
 		if (menuMode) {
 			navigateMenu(&currentMenu);
@@ -111,22 +92,22 @@ int main(void) {
 			// Run application
 			switch (currentApp) {
 
-				case CALIBRATE:
-					calibrateJoystick();		// Implement calibration procedure on OLED?
+				case APP_CALIBRATE:
+					calibrateJoystick();
 					drawCheckMark();
 					menuMode = 1;
 					loadMenu(currentMenuIndex, currentMenu);
 					break;
 
-				case DRAW:
+				case APP_DRAW:
 					if (buttonPressed(JOYSTICK)) clearDisplaySRAM();
 					drawJoystickSRAM();
 					refreshOLED();
 					_delay_ms(25);	// Speed of drawing
 					break;
 
-				case FONTSIZE:
-					changeFont(currentMenuIndex);
+				case APP_FONTSIZE:
+					setFont(currentMenuIndex);
 					menuMode = 1;
 					loadMenu(currentMenuIndex, currentMenu);
 					break;

@@ -7,9 +7,12 @@ driverUART.h
 #ifndef DRIVERUART_H_
 #define DRIVERUART_H_
 
-#include <stdio.h>    // For FILE variable
+// Includes
+#include "setup.h"		// For setBit(), loopUntilSet(), etc..
+#include <avr/io.h>		// For use of defined AVR registers and bits
+#include <stdio.h>		// For FILE variable and printf()
 
-
+// Functions
 // For UART communication
 void initUART(unsigned int ubrr);                     // Initializes UART interface
 void transmitUART(unsigned char data, FILE *stream);  // Transmits data to UART

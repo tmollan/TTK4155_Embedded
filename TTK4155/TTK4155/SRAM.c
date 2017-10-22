@@ -1,20 +1,28 @@
 
 // Includes
-#include "setup.h"			// For setBit(), loopUntilSet(), etc..
-#include <avr/io.h>			// For use of defined AVR registers and bits
-#include <stdlib.h>			// For rand()
-#include <stdint.h>			// For uint8_t, uint16_t, etc..
-#include <stdio.h>			// For printf()
+#include "SRAM.h"
 
 
 // Initializes SRAM
 void initSRAM(void) {
-	printf("Initializing SRAM.\n");
-	
 	setBit(MCUCR, SRE);			// Enables the external memory interface
 	setBit(SFIOR, XMM2);		// Masks out PC4-PC7 for the JTAG interface
-	
-	printf("SRAM initialized!\n\n");
+
+	printf("SRAM external memory enabled\n");
+}
+
+
+// Writes data (0x00-0xFF) to an address (0x000-0x800) on the SRAM
+void writeSRAM(uint16_t address, uint8_t data) {
+	volatile char *ext_ram = (char*) 0x1800;		// Start address for the SRAM
+	ext_ram[address] = data;						// Writes data to address
+}
+
+
+// Reads data (0x00-0xFF) from an address (0x000-0x800) on the SRAM
+uint8_t readSRAM(uint16_t address) {
+	volatile char *ext_ram = (char*) 0x1800;		// Start address for the SRAM
+	return ext_ram[address];						// Reads data from address
 }
 
 
@@ -58,18 +66,4 @@ void testSRAM(void) {
 		}
 	}
 	printf("SRAM test completed with\n%4d errors in write phase and\n%4d errors in retrieval phase\n\n", write_errors, retrieval_errors);
-}
-
-
-// Writes data (0x00-0xFF) to an address (0x000-0x800) on the SRAM
-void writeSRAM(uint16_t address, uint8_t data) {
-	volatile char *ext_ram = (char*) 0x1800;		// Start address for the SRAM
-	ext_ram[address] = data;						// Writes data to address
-}
-
-
-// Reads data (0x00-0xFF) from an address (0x000-0x800) on the SRAM
-uint8_t readSRAM(uint16_t address) {
-	volatile char *ext_ram = (char*) 0x1800;		// Start address for the SRAM
-	return ext_ram[address];						// Reads data from address
 }

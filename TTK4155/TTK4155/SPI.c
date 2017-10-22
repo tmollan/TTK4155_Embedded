@@ -12,8 +12,9 @@ void initSPI(void) {
 	setBit(SPCR, SPR0);		// Clock rate fck/16
 	setBit(SPCR, MSTR);		// Enable master
 	setBit(SPCR, SPE);		// Enable SPI
-	
+
 	releaseSlave();		// No selected slaves
+	printf("SPI enabled\n");
 }
 
 
