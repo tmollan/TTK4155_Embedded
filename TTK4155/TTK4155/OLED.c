@@ -436,7 +436,7 @@ void drawCheckMark(void) {
 	_delay_ms(5000);
 }
 
-/*
+
 void drawStartScreen(void) {
 	for (int16_t i = 0; i < 1024; i++) {
 		uint8_t data = pgm_read_byte(&startscreen[i]);
@@ -444,7 +444,7 @@ void drawStartScreen(void) {
 	}
 	refreshOLED();
 }
-*/
+
 
 // Changes the global font and fontWidth
 void setFont(font size) {

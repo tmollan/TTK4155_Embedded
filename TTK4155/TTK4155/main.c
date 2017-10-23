@@ -44,21 +44,16 @@ int main(void) {
 	menupage *currentMenu = malloc(sizeof(menupage));
 	initMenu(&currentMenu);
 
-	initCAN(MODE_LOOPBACK);
+	initCAN(MODE_NORMAL);
 
 	/*
 	// For read- and write-test of SRAM
 	uint16_t address = 0x000;			// 0x000-0x800 (2048 addresses)
 	uint8_t writeData, readData;		// 0x00-0xFF (0-255)
 	*/
-
-	/*
-	joystick myJoystick;
-	sliders mySliders;
-	*/
-
-
-	// CAN test
+	
+	
+	/*// CAN test
 	CANmessage myMessage;
 	myMessage.id = 0x0123;		// Max 0x07ef
 	myMessage.length = 5;
@@ -74,11 +69,27 @@ int main(void) {
 
 	for (int i = 0; i < recMessage.length; i++) {
 		printf("%d", recMessage.dataBytes[i]);
-	}
-
-
+	}*/
+	
+	joystick myJoystick;
+	sliders mySliders;
+	
 	while(1) {
-
+		myJoystick = getJoystick();
+		mySliders = getSliders();
+		
+		CANmessage myMessage;
+		myMessage.id = 0x010F;		// Max 0x07ef
+		myMessage.length = 7;
+		myMessage.dataBytes[0] = myJoystick.xPos;
+		myMessage.dataBytes[1] = myJoystick.yPos;
+		myMessage.dataBytes[2] = (uint8_t)(myJoystick.angle >> 8);
+		myMessage.dataBytes[3] = (uint8_t)myJoystick.angle;
+		myMessage.dataBytes[4] = myJoystick.dir;
+		myMessage.dataBytes[5] = mySliders.leftPos;
+		myMessage.dataBytes[6] = mySliders.rightPos;
+		transmitCAN(myMessage);
+		
 		if (menuMode) {
 			navigateMenu(&currentMenu);
 
