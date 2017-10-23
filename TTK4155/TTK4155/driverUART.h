@@ -8,8 +8,6 @@ driverUART.h
 #define DRIVERUART_H_
 
 // Includes
-#include "setup.h"		// For setBit(), loopUntilSet(), etc..
-#include <avr/io.h>		// For use of defined AVR registers and bits
 #include <stdio.h>		// For FILE variable and printf()
 
 // Functions

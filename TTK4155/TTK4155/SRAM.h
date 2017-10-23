@@ -8,11 +8,7 @@ SRAM.h
 #define SRAM_H_
 
 // Includes
-#include "setup.h"			// For setBit(), loopUntilSet(), etc..
-#include <avr/io.h>			// For use of defined AVR registers and bits
-#include <stdlib.h>			// For rand()
-#include <stdint.h>			// For uint8_t, uint16_t, etc..
-#include <stdio.h>			// For printf()
+
 
 // Functions
 void initSRAM(void);                            // Initializes SRAM

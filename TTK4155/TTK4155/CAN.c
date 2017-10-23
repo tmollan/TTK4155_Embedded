@@ -15,7 +15,7 @@ void initCAN(uint8_t mode) {
 	}
 	setModeCAN(mode);
 	if (inModeCAN(mode)) {
-		printf("CAN bus running\n");
+		printf("CAN bus running\n\n");
 	}
 }
 
@@ -29,11 +29,10 @@ void transmitCAN(CANmessage message) {
 	// Buffer register address offset
 	uint8_t addr;
 	switch (transmitBuffer) {
-		case TBUFF1: addr = 0x10;
-		case TBUFF2: addr = 0x20;
+		case TBUFF1: addr = 0x10; break;
+		case TBUFF2: addr = 0x20; break;
 		default: addr = 0x00;
 	}
-
 	// Transmit frame
 	message.id = message.id << 5;
 	writeCAN(TXB0SIDH + addr, message.idBytes[1]);
@@ -52,21 +51,21 @@ void transmitCAN(CANmessage message) {
 CANmessage receiveCAN(void) {
 	CANmessage message;
 	uint8_t receiveBuffer = getReceiveBufferCAN();
-
+	
 	// No buffers ready
 	if (!receiveBuffer) {
 		// error implementation?
 		message.id = NO_MESSAGE;
+		printf("%d\n", receiveBuffer);
 		return message;
 	}
-
 	// Buffer register address offset
 	uint8_t addr;
 	switch (receiveBuffer) {
-		case RBUFF1: addr = 0x10;
+		case RBUFF1: addr = 0x10; break;
 		default: addr = 0x00;
 	}
-
+	
 	// Receive frame
 	message.idBytes[1] = readCAN(RXB0SIDH + addr);
 	message.idBytes[0] = readCAN(RXB0SIDL + addr);
@@ -78,6 +77,7 @@ CANmessage receiveCAN(void) {
 
 	// Clear flag for full buffer
 	modifyBitCAN(CANINTF, RBUFF_MASK, receiveBuffer);
+	
 	return message;
 }
 

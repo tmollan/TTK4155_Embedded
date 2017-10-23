@@ -1,6 +1,8 @@
 
 // Includes
-#include "ADC.h"
+#include "setup.h"			// Because delay needs F_OSC or F_CPU (?)
+#include <util/delay.h>		// For _delay_ms, _delay_us, etc..
+#include <stdint.h>			// For uint8_t, uint16_t, etc..
 
 
 // Reads data (0x00-0xFF) from address (0x000) on the ADC

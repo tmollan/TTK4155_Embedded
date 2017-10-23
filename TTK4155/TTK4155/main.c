@@ -66,10 +66,11 @@ int main(void) {
 		myMessage.dataBytes[i] = n;
 	}
 
-	printf("Before transmit:\nID: %.4x\nlength: %d\n", myMessage.id, myMessage.length);
+	printf("Before transmit:\nID: %.4x\nlength: %d\n\n", myMessage.id, myMessage.length);
 	transmitCAN(myMessage);
+	_delay_ms(500);
 	CANmessage recMessage = receiveCAN();
-	printf("After transmit:\nID: %.4x\nlength: %d\n", recMessage.id, recMessage.length);
+	printf("After transmit:\nID: %.4x\nlength: %d\n\n", recMessage.id, recMessage.length);
 
 	for (int i = 0; i < recMessage.length; i++) {
 		printf("%d", recMessage.dataBytes[i]);
@@ -113,6 +114,7 @@ int main(void) {
 					break;
 
 				default:
+					printf("%d", currentApp);
 					printf("No active apps.\n");
 			}
 		}

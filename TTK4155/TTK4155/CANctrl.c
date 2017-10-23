@@ -75,26 +75,26 @@ void setModeCAN(uint8_t mode) {
 uint8_t inModeCAN(uint8_t mode) {
 	uint8_t currentMode = getModeCAN();
 	if (currentMode != mode) {
-		switch (mode) {
+		/*switch (mode) {
 			case MODE_NORMAL:
-				printf("CAN is NOT in Normal Operation mode: CANSTAT = 0x%.2x\n");
+				printf("CAN is NOT in Normal Operation mode: CANSTAT = 0x%.2x\n", currentMode);
 				break;
 			case MODE_SLEEP:
-				printf("CAN is NOT in Sleep mode: CANSTAT = 0x%.2x\n");
+				printf("CAN is NOT in Sleep mode: CANSTAT = 0x%.2x\n", currentMode);
 				break;
 			case MODE_LOOPBACK:
-				printf("CAN is NOT in Loopback mode: CANSTAT = 0x%.2x\n");
+				printf("CAN is NOT in Loopback mode: CANSTAT = 0x%.2x\n", currentMode);
 				break;
 			case MODE_LISTENONLY:
-				printf("CAN is NOT in Listen-only mode: CANSTAT = 0x%.2x\n");
+				printf("CAN is NOT in Listen-only mode: CANSTAT = 0x%.2x\n", currentMode);
 				break;
 			case MODE_CONFIG:
-				printf("CAN is NOT in Configuration mode: CANSTAT = 0x%.2x\n");
+				printf("CAN is NOT in Configuration mode: CANSTAT = 0x%.2x\n", currentMode);
 				break;
 			case MODE_POWERUP:
-				printf("CAN is NOT in Power-up mode: CANSTAT = 0x%.2x\n");
+				printf("CAN is NOT in Power-up mode: CANSTAT = 0x%.2x\n", currentMode);
 				break;
-		}
+		}*/
 		return 0;
 	}
 	return 1;

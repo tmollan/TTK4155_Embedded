@@ -10,16 +10,6 @@ OLED.h
 
 // Includes
 #include <stdint.h>
-#include <stdio.h>			// For printf()
-#include <stdlib.h>
-#include <math.h>
-#include <util/delay.h>
-#include <string.h>
-#include "fonts.h"
-#include "animations.h"
-#include "joystick.h"
-#include "SRAM.h"
-#include "menu.h"
 
 // Global variables
 extern volatile struct positionOLED cursor;

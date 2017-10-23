@@ -1,6 +1,14 @@
 
 // Includes
+#include "setup.h"
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <util/delay.h>
+#include "OLED.h"
 #include "menu.h"
+#include "joystick.h"
 
 
 void initMenu(menupage **menu) {

@@ -1,6 +1,8 @@
 
 // Includes
-#include "EEPROM.h"
+#include "setup.h"			// For setBit(), loopUntilClear(), etc..
+#include <avr/io.h>			// For use of defined AVR registers and bits
+#include <stdint.h>			// For uint8_t, uint16_t, etc..
 
 
 // Writes data (0x00-0xFF) to an address (0x000-0x1FF) in EEPROM

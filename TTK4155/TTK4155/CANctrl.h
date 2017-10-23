@@ -9,6 +9,8 @@ CANCTRL.h
 
 // Includes
 #include "SPI.h"        // For select-/releaseSlave and defines
+#include <util/delay.h>
+#include <stdio.h>
 
 // Defines
 // SPI instructions
@@ -119,7 +121,7 @@ void modifyBitCAN(uint8_t address, uint8_t mask, uint8_t data);
 void resetCAN(void);
 uint8_t getModeCAN(void);
 void setModeCAN(uint8_t mode);
-void inModeCAN(uint8_t mode);
+uint8_t inModeCAN(uint8_t mode);
 
 
 #endif /* CANCTRL_H_ */

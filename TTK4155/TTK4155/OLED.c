@@ -1,6 +1,17 @@
 
 // Includes
+#include <stdint.h>
+#include <stdio.h>			// For printf()
+#include <stdlib.h>
+#include <math.h>
+#include <util/delay.h>
+#include <string.h>
 #include "OLED.h"
+#include "fonts.h"
+#include "animations.h"
+#include "joystick.h"
+#include "SRAM.h"
+#include "menu.h"
 
 
 // Global variables
@@ -417,14 +428,11 @@ void setCursor(uint8_t page, uint8_t column) {
 
 // Draws an animated check mark
 void drawCheckMark(void) {
-	for (int8_t n = 0; n < 3; n++) {
-		for (int16_t i = 0; i < 1024; i++) {
-			uint8_t data = pgm_read_byte(&checkmark[n][i]);
-			writeSRAM(i, pgm_read_byte(&BitReversalTable256[data]));
-		}
-		refreshOLED();
-		_delay_ms(100);
+	for (int16_t i = 0; i < 1024; i++) {
+		uint8_t data = pgm_read_byte(&checkmark[i]);
+		writeSRAM(i, pgm_read_byte(&BitReversalTable256[data]));
 	}
+	refreshOLED();
 	_delay_ms(5000);
 }
 

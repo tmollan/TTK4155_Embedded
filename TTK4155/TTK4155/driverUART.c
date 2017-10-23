@@ -1,6 +1,8 @@
 
 // Includes
-#include "driverUART.h"
+#include "setup.h"		// For setBit(), loopUntilSet(), etc..
+#include <avr/io.h>		// For use of defined AVR registers and bits
+#include <stdio.h>		// For FILE variable and printf()
 
 
 // Initializes UART interface

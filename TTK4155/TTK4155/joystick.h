@@ -14,7 +14,6 @@ joystick.h
 #include <stdio.h>			// For printf()
 #include <math.h>			// For atan2() (?) and M_PI (?)
 #include <util/delay.h>
-#include "joystick.h"		// For enum, structs and defines
 #include "ADC.h"			// For readADC()
 #include "EEPROM.h"			// For read- and writeEEPROM()
 #include "OLED.h"

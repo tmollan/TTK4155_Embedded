@@ -8,14 +8,7 @@ menu.h
 #define MENU_H_
 
 // Includes
-#include "setup.h"
 #include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <util/delay.h>
-#include "OLED.h"
-#include "joystick.h"
 
 // Global variables
 extern volatile int8_t menuMode, currentMenuIndex;
