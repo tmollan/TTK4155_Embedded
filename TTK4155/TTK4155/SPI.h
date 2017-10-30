@@ -11,6 +11,7 @@ SPI.h
 #include "setup.h"		// For makeInput/-Output, setBit and loopUntilSet
 #include <avr/io.h>
 #include <stdint.h>		// For uint8_t
+#include <stdio.h>
 
 
 // SPI defines
