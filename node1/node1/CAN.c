@@ -51,12 +51,11 @@ void transmitCAN(CANmessage message) {
 CANmessage receiveCAN(void) {
 	CANmessage message;
 	uint8_t receiveBuffer = getReceiveBufferCAN();
-	
+
 	// No buffers ready
 	if (!receiveBuffer) {
 		// error implementation?
 		message.id = NO_MESSAGE;
-		printf("%d\n", receiveBuffer);
 		return message;
 	}
 	// Buffer register address offset
@@ -65,7 +64,7 @@ CANmessage receiveCAN(void) {
 		case RBUFF1: addr = 0x10; break;
 		default: addr = 0x00;
 	}
-	
+
 	// Receive frame
 	message.idBytes[1] = readCAN(RXB0SIDH + addr);
 	message.idBytes[0] = readCAN(RXB0SIDL + addr);
@@ -76,8 +75,8 @@ CANmessage receiveCAN(void) {
 	}
 
 	// Clear flag for full buffer
-	modifyBitCAN(CANINTF, RBUFF_MASK, receiveBuffer);
-	
+	modifyBitCAN(CANINTF, receiveBuffer, 0x00);
+
 	return message;
 }
 

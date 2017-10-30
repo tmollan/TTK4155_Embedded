@@ -1,30 +1,25 @@
-/*
- * node2.c
- *
- * Created: 23.10.2017 10:48:47
- *  Author: torkilsm
- */ 
 
+// Includes
 #include "setup.h"
 #include <avr/io.h>
+
+// Headers
 #include "driverUART.h"
 #include "SPI.h"
 #include "CANctrl.h"
 #include "CAN.h"
 
 
-int main(void)
-{
+int main(void) {
 	// For printf() functionality
 	stdout = &mystdout;		// Redirect stdout to UART
 	stdin = &mystdin;		// Redirect stdin to UART
-	
+
 	initUART(MYUBRR);
-	
+
 	initCAN(MODE_NORMAL);
-	
-    while(1)
-    {
+
+    while(1) {
 		CANmessage msg = receiveCAN();
 		if (msg.id != NO_MESSAGE) {
 			printf("Id: 0x%.4x\n", msg.id);
@@ -38,6 +33,5 @@ int main(void)
 			printf("\n\n");
 		}
 		_delay_ms(1000);
-		
     }
 }
