@@ -33,7 +33,7 @@ typedef union {
         uint8_t loaded : 1,
 				mode : 1,
                 difficulty : 2,
-                unused4 : 1,
+                newGame : 1,
 				usused3 : 1,
 				unused2 : 1,
 				unused1 : 1;

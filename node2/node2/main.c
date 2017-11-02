@@ -25,7 +25,7 @@ int main(void) {
 
 	initCAN(MODE_NORMAL);
 
-	initPWN();
+	initPWM();
 
 	initADC();
 
@@ -39,7 +39,7 @@ int main(void) {
     while (1) {
 
 		getGameInfo(game);
-		
+
 
 		if (game->flags.mode == GAME_ON) {
 			driveServo(game->joyPos);

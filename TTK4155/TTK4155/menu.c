@@ -172,6 +172,7 @@ void navigateMenu(menupage **menu) {
 // Function to create a new menu page
 menupage * newMenu(menupage *prevPage) {
     menupage *myPage = malloc(sizeof(menupage));
+    if (myPage == NULL) return NULL;
     myPage->prevPage = prevPage;
     return myPage;
 }
@@ -179,6 +180,7 @@ menupage * newMenu(menupage *prevPage) {
 // Function to create a new list item on a menu page
 menuitem * newItem(char *name, menupage *nextPage, application app) {
     menuitem *myItem = malloc(sizeof(menuitem));
+    if (myItem == NULL) return NULL;
     myItem->name = name;
     myItem->nextPage = nextPage;
     myItem->app = app;

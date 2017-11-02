@@ -17,7 +17,7 @@ PWM.h
 // PWM_TOP = F_OSC/F_PWM/PRESCALER-1 where F_PWM = 50Hz
 #define PWM_TOP 39999
 
-void initPWN(void);
+void initPWM(void);
 void driveServo(int8_t pos);
 
 

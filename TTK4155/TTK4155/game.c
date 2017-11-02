@@ -28,6 +28,7 @@ void initGameMenu(menupage **menu) {
 void initGame(gameInfo *game) {
     game->flags.loaded = 0;
     game->flags.mode = GAME_OFF;
+    game->flags.newGame = 0;
 }
 
 void loadGame(gameInfo *game, menupage *menu) {
@@ -40,8 +41,10 @@ void loadGame(gameInfo *game, menupage *menu) {
 void startGame(gameInfo *game) {
     game->flags.mode = GAME_ON;
     game->lives = 3;
+
+    game->flags.newGame = 1;
 	sendGameInfo(game);
-	_delay_ms(1000);
+    game->flags.newGame = 0;
 }
 
 void endGame(gameInfo *game, menupage *menu) {
@@ -51,9 +54,9 @@ void endGame(gameInfo *game, menupage *menu) {
 	uint16_t address = posAddressSRAM(3, 63-strlen(string)*fontWidth/2);
     clearDisplaySRAM();
     drawStringSRAM(string, address);
-    for (int8_t i = 0; i < 5; i++) {
+    for (int8_t i = 0; i < 9; i++) {
     	refreshOLED();
-        _delay_ms(1000);
+        _delay_ms(500);
         invertDisplaySRAM();
     }
 	setFont(tempFont);

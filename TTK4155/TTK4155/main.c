@@ -92,7 +92,6 @@ int main(void) {
 				case APP_NEWGAME:
 					startGame(game);
 					gotoGameApp();
-					drawStartScreen();
 					break;
 
 				case APP_EXITGAME:
@@ -109,7 +108,7 @@ int main(void) {
 					drawJoystickSRAM();
 					refreshOLED();
 					_delay_ms(25);	// Speed of drawing
-					
+
 					if (buttonPressed(LEFTBUTTON) && buttonPressed(RIGHTBUTTON)) exitApp(currentMenu);
 					break;
 

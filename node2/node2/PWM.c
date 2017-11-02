@@ -2,7 +2,7 @@
 // Includes
 #include "PWM.h"
 
-void initPWN(void) {
+void initPWM(void) {
 	// Initialize output pin
 	makeOutput(DDR_PWM, PWMPIN);
 
