@@ -14,6 +14,7 @@ CAN.h
 
 // Defines
 #define NO_MESSAGE 0x0000
+#define GAME_MESSAGE 0x0001
 
 
 typedef struct {

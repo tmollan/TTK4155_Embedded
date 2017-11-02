@@ -117,7 +117,7 @@ int8_t buttonPressed(button b) {
 
 
 void calibrateJoystick(void) {
-	printf("Calibrating joystick\n");
+	printf("Calibrating joystick!\n");
 	// Reads center position 100 times and finds average
 	int xTemp = 0, yTemp = 0;
 	for (int8_t i = 0; i < 100; i++) {
@@ -128,7 +128,7 @@ void calibrateJoystick(void) {
 	yMidPos = yTemp/100;
 
 	// Calibrates the max and min positions
-	printf("Please move joystick slowly in a full circle to calibrate axes.\nPress the joystick down when done.\n");
+	printf("Move joystick around, and press down when done.\n");
 
 	int8_t tempFont = currentFont;
 	setFont(FONT_NORMAL);
@@ -156,7 +156,7 @@ void calibrateJoystick(void) {
 	writeEEPROM(EEAYMIN, yMin);		// Minimum value of y
 	writeEEPROM(EEAYMID, yMidPos);	// Center value of y
 	writeEEPROM(EEAJOYINIT, 0x01);	// Indicate that joystick has been calibrated
-	printf("Joystick parameters saved to EEPROM\n");
+	printf("Parameters saved to EEPROM\n");
 }
 
 // Gets parameters from EEPROM when joystick already has been calibrated

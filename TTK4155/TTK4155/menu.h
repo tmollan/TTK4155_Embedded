@@ -19,7 +19,11 @@ typedef enum application {
     APP_NONE,       // No connected application
     APP_CALIBRATE,
     APP_DRAW,
-    APP_FONTSIZE
+    APP_FONTSIZE,
+    APP_GAME,
+    APP_GAMEDIFF,
+    APP_NEWGAME,
+    APP_EXITGAME
 } application;
 
 typedef struct menupage {
@@ -41,6 +45,7 @@ void loadMenu(int8_t menuIndex, menupage *currentMenu);     // Loads a given men
 void gotoNextMenu(int8_t index, menupage **currentMenu);    // Enter selected submenu
 void gotoPrevMenu(menupage **currentMenu);      // Leave submenu and go back
 void exitMenu(void);                            // Exit menu and clear page
+void exitApp(menupage *menu);                   // Exits app and enters menu
 void navigateMenu(menupage **currentMenu);      // Menu navigation
 menupage * newMenu(menupage *prevPage);         // Create new menu page
 menuitem * newItem(char *name, menupage *nextPage, application app);    // Create new menu item

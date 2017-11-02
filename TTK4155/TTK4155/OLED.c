@@ -436,15 +436,23 @@ void drawCheckMark(void) {
 	_delay_ms(5000);
 }
 
-
+// Draws a self-made start screen
 void drawStartScreen(void) {
 	for (int16_t i = 0; i < 1024; i++) {
 		uint8_t data = pgm_read_byte(&startscreen[i]);
 		writeSRAM(i, pgm_read_byte(&BitReversalTable256[data]));
 	}
 	refreshOLED();
+	_delay_ms(10000);
 }
 
+// Inverts all OLED image on SRAM
+void invertDisplaySRAM(void) {
+	for (int16_t address = 0; address < 1024; address++) {
+		uint8_t data = ~readSRAM(address);
+		writeSRAM(address, data);
+	}
+}
 
 // Changes the global font and fontWidth
 void setFont(font size) {

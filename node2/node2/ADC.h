@@ -1,22 +1,21 @@
 /*
- * IR.h
- *
- * Created: 30.10.2017 15:36:49
- *  Author: torkilsm
- */ 
 
+ADC.h
 
-#ifndef IR_H_
-#define IR_H_
+*/
 
+#ifndef ADC_H_
+#define ADC_H_
+
+// Includes
 #include "setup.h"
 #include <avr/io.h>
 #include <stdint.h>
 
 
+// Functions
 void initADC(void);
-int8_t ballDetected(void);
+uint8_t readADC(void);
 
 
-
-#endif /* IR_H_ */
+#endif /* ADC_H_ */

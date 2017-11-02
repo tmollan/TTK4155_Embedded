@@ -1,19 +1,16 @@
 /*
 
-CAN.h
+game.h
 
 */
 
-#ifndef CAN_H_
-#define CAN_H_
+#ifndef GAME_H_
+#define GAME_H_
 
 // Includes
 #include <stdint.h>
-#include <string.h>
-#include "menu.h"
 #include "CAN.h"
-#include "joystick.h"
-#include "OLED.h"
+#include "ADC.h"
 
 // Defines
 // Game modes
@@ -24,6 +21,7 @@ CAN.h
 #define GDIFF_EASY 0
 #define GDIFF_MEDIUM 1
 #define GDIFF_HARD 2
+
 
 // Typedefs
 typedef union {
@@ -45,17 +43,12 @@ typedef struct {
     uint8_t lives;
 } gameInfo;
 
+
 // Functions
-void initGameMenu(menupage **menu);
 void initGame(gameInfo *game);
-void loadGame(gameInfo *game, menupage *menu);
-void startGame(gameInfo *game);
-void endGame(gameInfo *game, menupage *menu);
-void exitGame(gameInfo *game);
-void updateGameScreen(gameInfo *game);
 void sendGameInfo(gameInfo *game);
 void getGameInfo(gameInfo *game);
-void setDifficulty(int8_t diff);
+int8_t ballDetected(void);
 
 
-#endif /* CAN_H_ */
+#endif /* GAME_H_ */

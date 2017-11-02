@@ -20,6 +20,7 @@
 #include "SPI.h"
 #include "CANctrl.h"
 #include "CAN.h"
+#include "game.h"
 
 
 volatile int8_t menuMode, currentMenuIndex;
@@ -46,71 +47,62 @@ int main(void) {
 
 	initCAN(MODE_NORMAL);
 
-	/*
-	// For read- and write-test of SRAM
-	uint16_t address = 0x000;			// 0x000-0x800 (2048 addresses)
-	uint8_t writeData, readData;		// 0x00-0xFF (0-255)
-	*/
-	
-	
-	/*// CAN test
-	CANmessage myMessage;
-	myMessage.id = 0x0123;		// Max 0x07ef
-	myMessage.length = 5;
-	for (int i = 0, n = 1; i < myMessage.length; i++, n++) {
-		myMessage.dataBytes[i] = n;
-	}
+	gameInfo *game = malloc(sizeof(gameInfo));
+	initGame(game);
 
-	printf("Before transmit:\nID: %.4x\nlength: %d\n\n", myMessage.id, myMessage.length);
-	transmitCAN(myMessage);
-	_delay_ms(500);
-	CANmessage recMessage = receiveCAN();
-	printf("After transmit:\nID: %.4x\nlength: %d\n\n", recMessage.id, recMessage.length);
+	menupage *gameMenu = malloc(sizeof(menupage));
+	initGameMenu(&gameMenu);
 
-	for (int i = 0; i < recMessage.length; i++) {
-		printf("%d", recMessage.dataBytes[i]);
-	}*/
-	
-	joystick myJoystick;
-	sliders mySliders;
-	
-	while(1) {
-		myJoystick = getJoystick();
-		mySliders = getSliders();
-		
-		CANmessage myMessage;
-		myMessage.id = 0x010F;		// Max 0x07ef
-		myMessage.length = 7;
-		myMessage.dataBytes[0] = myJoystick.xPos;
-		myMessage.dataBytes[1] = myJoystick.yPos;
-		myMessage.dataBytes[2] = (uint8_t)(myJoystick.angle >> 8);
-		myMessage.dataBytes[3] = (uint8_t)myJoystick.angle;
-		myMessage.dataBytes[4] = myJoystick.dir;
-		myMessage.dataBytes[5] = mySliders.leftPos;
-		myMessage.dataBytes[6] = mySliders.rightPos;
-		transmitCAN(myMessage);
-		
+
+	while (1) {
+
+		// If menu mode is active
 		if (menuMode) {
 			navigateMenu(&currentMenu);
 
+		// Run application
 		} else {
-			// Return to menu mode
-			if (buttonPressed(LEFTBUTTON) && buttonPressed(RIGHTBUTTON)) {
-				menuMode = 1;
-				loadMenu(currentMenuIndex, currentMenu);
-				continue;
-			}
-
-			// Run application
 			switch (currentApp) {
 
-				case APP_CALIBRATE:
-					calibrateJoystick();
-					drawCheckMark();
-					menuMode = 1;
-					loadMenu(currentMenuIndex, currentMenu);
+
+				// Ping-pong game
+				case APP_GAME:
+					switch (game->flags.mode) {
+
+						case GAME_OFF:
+							if (!game->flags.loaded) loadGame(game, gameMenu);
+							navigateMenu(&gameMenu);
+							break;
+
+						default:
+							getGameInfo(game);
+							updateGameScreen(game);
+							if (game->lives == 0) endGame(game, gameMenu);
+							sendGameInfo(game);
+					}
 					break;
 
+				case APP_GAMEDIFF:
+					setDifficulty(currentMenuIndex);
+					currentApp = APP_GAME;
+					loadMenu(currentMenuIndex, gameMenu);
+					break;
+
+				case APP_NEWGAME:
+					startGame(game);
+					currentApp = APP_GAME;
+					drawStartScreen();
+					break;
+
+				case APP_EXITGAME:
+					exitGame(game);
+					exitApp(currentMenu);
+					break;
+
+
+
+
+				// Drawing on OLED with joystick
 				case APP_DRAW:
 					if (buttonPressed(JOYSTICK)) clearDisplaySRAM();
 					drawJoystickSRAM();
@@ -118,28 +110,52 @@ int main(void) {
 					_delay_ms(25);	// Speed of drawing
 					break;
 
-				case APP_FONTSIZE:
-					setFont(currentMenuIndex);
-					menuMode = 1;
-					loadMenu(currentMenuIndex, currentMenu);
+
+
+				// Joystick calibration procedure
+				case APP_CALIBRATE:
+					calibrateJoystick();
+					drawCheckMark();
+					exitApp(currentMenu);
 					break;
 
-				default:
-					printf("%d", currentApp);
-					printf("No active apps.\n");
+
+
+				// Changes font on OLED
+				case APP_FONTSIZE:
+					setFont(currentMenuIndex);
+					exitApp(currentMenu);
+					break;
+
+
+				default: printf("No active apps.\n");
 			}
 		}
 
-
 		/*
-		// Return joystick and slider positions
-		_delay_ms(1000);
-		myJoystick = getJoystick();
-		printf("xPos: %d, yPos: %d, angle: %d, dir: %d\n", myJoystick.xPos, myJoystick.yPos, myJoystick.angle, myJoystick.dir);
-
-		mySliders = getSliders();
-		printf("Left: %d, right: %d\n", mySliders.leftPos, mySliders.rightPos);
+		// For read- and write-test of SRAM
+		uint16_t address = 0x000;			// 0x000-0x800 (2048 addresses)
+		uint8_t writeData, readData;		// 0x00-0xFF (0-255)
 		*/
+
+
+		/*// CAN test
+		CANmessage myMessage;
+		myMessage.id = 0x0123;		// Max 0x07ef
+		myMessage.length = 5;
+		for (int i = 0, n = 1; i < myMessage.length; i++, n++) {
+			myMessage.dataBytes[i] = n;
+		}
+
+		printf("Before transmit:\nID: %.4x\nlength: %d\n\n", myMessage.id, myMessage.length);
+		transmitCAN(myMessage);
+		_delay_ms(500);
+		CANmessage recMessage = receiveCAN();
+		printf("After transmit:\nID: %.4x\nlength: %d\n\n", recMessage.id, recMessage.length);
+
+		for (int i = 0; i < recMessage.length; i++) {
+			printf("%d", recMessage.dataBytes[i]);
+		}*/
 
 		/*
 		// Text entered should return

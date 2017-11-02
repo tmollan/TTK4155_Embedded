@@ -27,11 +27,12 @@ void initMenu(menupage **menu) {
     homePage->length = 2;
 
     // List of items on play page
-    menuitem **playItems = malloc(1 * sizeof(menuitem*));
-    playItems[0] = newItem("Draw", NULL, APP_DRAW);
+    menuitem **playItems = malloc(2 * sizeof(menuitem*));
+    playItems[0] = newItem("Ping-pong", NULL, APP_GAME);
+    playItems[1] = newItem("Draw", NULL, APP_DRAW);
     playPage->items = malloc(sizeof(playItems));
     playPage->items = playItems;
-    playPage->length = 1;
+    playPage->length = 2;
 
     // List of items on option page
     menuitem **optionsItems = malloc(2 * sizeof(menuitem*));
@@ -109,6 +110,13 @@ void exitMenu(void) {
     menuMode = 0;
     clearDisplaySRAM();
     refreshOLED();
+}
+
+// Exits app and enters menu
+void exitApp(menupage *menu) {
+    currentApp = APP_NONE;
+    menuMode = 1;
+    loadMenu(currentMenuIndex, menu);
 }
 
 // Navigates menu based on joystick position

@@ -83,7 +83,8 @@ void setCursor(uint8_t page, uint8_t column);
 
 // Animates a check mark
 void drawCheckMark(void);
-//void drawStartScreen(void);
+void drawStartScreen(void);
+void invertDisplaySRAM(void);
 
 // Changes the global font
 void setFont(font size);

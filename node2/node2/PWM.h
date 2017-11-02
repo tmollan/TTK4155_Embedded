@@ -1,10 +1,8 @@
 /*
- * PWM.h
- *
- * Created: 30.10.2017 08:41:25
- *  Author: torkilsm
- */ 
 
+PWM.h
+
+*/
 
 #ifndef PWM_H_
 #define PWM_H_
@@ -15,6 +13,9 @@
 
 #define DDR_PWM DDRB
 #define PWMPIN PINB5
+
+// PWM_TOP = F_OSC/F_PWM/PRESCALER-1 where F_PWM = 50Hz
+#define PWM_TOP 39999
 
 void initPWN(void);
 void driveServo(int8_t pos);
