@@ -19,35 +19,39 @@ void initMenu(menupage **menu) {
     menupage *fontPage = newMenu(optionsPage);
 
     // List of items on home page
-    menuitem **homeItems = malloc(2 * sizeof(menuitem*));
+    //menuitem **homeItems = malloc(2 * sizeof(menuitem*));
+    menuitem *homeItems[2];
     homeItems[0] = newItem("Play game", playPage, APP_NONE);
     homeItems[1] = newItem("Options", optionsPage, APP_NONE);
-    homePage->items = malloc(sizeof(homeItems));
+    //homePage->items = malloc(sizeof(homeItems));
     homePage->items = homeItems;
     homePage->length = 2;
 
     // List of items on play page
-    menuitem **playItems = malloc(2 * sizeof(menuitem*));
+    //menuitem **playItems = malloc(2 * sizeof(menuitem*));
+    menuitem *playItems[2];
     playItems[0] = newItem("Ping-pong", NULL, APP_GAME);
     playItems[1] = newItem("Draw", NULL, APP_DRAW);
-    playPage->items = malloc(sizeof(playItems));
+    //playPage->items = malloc(sizeof(playItems));
     playPage->items = playItems;
     playPage->length = 2;
 
     // List of items on option page
-    menuitem **optionsItems = malloc(2 * sizeof(menuitem*));
+    //menuitem **optionsItems = malloc(2 * sizeof(menuitem*));
+    menuitem *optionsItems[2];
     optionsItems[0] = newItem("Calibrate", NULL, APP_CALIBRATE);
     optionsItems[1] = newItem("Change font", fontPage, APP_NONE);
-    optionsPage->items = malloc(sizeof(optionsItems));
+    //optionsPage->items = malloc(sizeof(optionsItems));
     optionsPage->items = optionsItems;
     optionsPage->length = 2;
 
     // List of items on options->font page
-    menuitem **fontItems = malloc(3 * sizeof(menuitem*));
+    //menuitem **fontItems = malloc(3 * sizeof(menuitem*));
+    menuitem *fontItems[3];
     fontItems[0] = newItem("Big", NULL, APP_FONTSIZE);
     fontItems[1] = newItem("Normal", NULL, APP_FONTSIZE);
     fontItems[2] = newItem("Small", NULL, APP_FONTSIZE);
-    fontPage->items = malloc(sizeof(fontItems));
+    //fontPage->items = malloc(sizeof(fontItems));
     fontPage->items = fontItems;
     fontPage->length = 3;
 

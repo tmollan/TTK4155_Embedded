@@ -6,19 +6,21 @@ void initGameMenu(menupage **menu) {
     menupage *gamePage = newMenu(NULL);
     menupage *settingsPage = newMenu(gamePage);
 
-    menuitem **gameItems = malloc(3 * sizeof(menuitem*));
+    //menuitem **gameItems = malloc(3 * sizeof(menuitem*));
+    menuitem *gameItems[3];
     gameItems[0] = newItem("New game", NULL, APP_NEWGAME);
     gameItems[1] = newItem("Difficulty", settingsPage, APP_NONE);
     gameItems[2] = newItem("Exit", NULL, APP_EXITGAME);
-    gamePage->items = malloc(sizeof(gameItems));
+    //gamePage->items = malloc(sizeof(gameItems));
     gamePage->items = gameItems;
     gamePage->length = 3;
 
-    menuitem **settingsItems = malloc(3 * sizeof(menuitem*));
+    //menuitem **settingsItems = malloc(3 * sizeof(menuitem*));
+    menuitem *settingsItems[3];
     settingsItems[0] = newItem("Easy", NULL, APP_GAMEDIFF);
     settingsItems[1] = newItem("Medium", NULL, APP_GAMEDIFF);
     settingsItems[2] = newItem("Hard", NULL, APP_GAMEDIFF);
-    settingsPage->items = malloc(sizeof(settingsItems));
+    //settingsPage->items = malloc(sizeof(settingsItems));
     settingsPage->items = settingsItems;
     settingsPage->length = 3;
 
