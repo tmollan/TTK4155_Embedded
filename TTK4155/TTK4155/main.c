@@ -83,14 +83,15 @@ int main(void) {
 					break;
 
 				case APP_GAMEDIFF:
-					setDifficulty(currentMenuIndex);
-					currentApp = APP_GAME;
+					setDifficulty(game, currentMenuIndex);
+					drawCheckMark();
+					gotoGameApp();
 					loadMenu(currentMenuIndex, gameMenu);
 					break;
 
 				case APP_NEWGAME:
 					startGame(game);
-					currentApp = APP_GAME;
+					gotoGameApp();
 					drawStartScreen();
 					break;
 
@@ -108,6 +109,8 @@ int main(void) {
 					drawJoystickSRAM();
 					refreshOLED();
 					_delay_ms(25);	// Speed of drawing
+					
+					if (buttonPressed(LEFTBUTTON) && buttonPressed(RIGHTBUTTON)) exitApp(currentMenu);
 					break;
 
 
@@ -128,7 +131,7 @@ int main(void) {
 					break;
 
 
-				default: printf("No active apps.\n");
+				default: printf("No active apps. %d\n", (int8_t)currentApp);
 			}
 		}
 

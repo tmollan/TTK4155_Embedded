@@ -14,6 +14,7 @@ void getGameInfo(gameInfo *game) {
     if (msg.id == GAME_MESSAGE) {
         game->flags.byte = msg.dataBytes[0];
         game->joyPos = (int8_t)msg.dataBytes[1];
+		game->lives = msg.dataBytes[2];
     }
 }
 

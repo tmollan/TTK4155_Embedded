@@ -40,6 +40,8 @@ void loadGame(gameInfo *game, menupage *menu) {
 void startGame(gameInfo *game) {
     game->flags.mode = GAME_ON;
     game->lives = 3;
+	sendGameInfo(game);
+	_delay_ms(1000);
 }
 
 void endGame(gameInfo *game, menupage *menu) {
@@ -77,6 +79,7 @@ void updateGameScreen(gameInfo *game) {
     sprintf(lives, "%d", game->lives);
     address = posAddressSRAM(4, 63-strlen(lives)*fontWidth/2);
     drawStringSRAM(lives, address);
+	refreshOLED();
 
 	setFont(tempFont);
 }
@@ -90,9 +93,10 @@ void sendGameInfo(gameInfo *game) {
 
     CANmessage msg;
     msg.id = GAME_MESSAGE;		// Max 0x07ef
-    msg.length = 2;
+    msg.length = 3;
     msg.dataBytes[0] = game->flags.byte;
     msg.dataBytes[1] = myJoystick.xPos;
+	msg.dataBytes[2] = game->lives;
 
     transmitCAN(msg);
 }

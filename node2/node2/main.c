@@ -3,6 +3,7 @@
 #include "setup.h"
 #include <avr/io.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 // Headers
 #include "driverUART.h"
@@ -35,10 +36,10 @@ int main(void) {
 	int8_t ballPresent = 0;
 	int16_t ballCount = 0;
 
-
     while (1) {
 
 		getGameInfo(game);
+		
 
 		if (game->flags.mode == GAME_ON) {
 			driveServo(game->joyPos);

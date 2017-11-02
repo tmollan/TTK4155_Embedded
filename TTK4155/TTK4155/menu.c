@@ -119,6 +119,11 @@ void exitApp(menupage *menu) {
     loadMenu(currentMenuIndex, menu);
 }
 
+// Change app
+void gotoGameApp() {
+	currentApp = APP_GAME;
+}
+
 // Navigates menu based on joystick position
 void navigateMenu(menupage **menu) {
 	joystick js = getJoystick();

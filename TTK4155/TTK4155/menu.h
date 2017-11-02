@@ -46,6 +46,7 @@ void gotoNextMenu(int8_t index, menupage **currentMenu);    // Enter selected su
 void gotoPrevMenu(menupage **currentMenu);      // Leave submenu and go back
 void exitMenu(void);                            // Exit menu and clear page
 void exitApp(menupage *menu);                   // Exits app and enters menu
+void gotoGameApp();								// Changes app
 void navigateMenu(menupage **currentMenu);      // Menu navigation
 menupage * newMenu(menupage *prevPage);         // Create new menu page
 menuitem * newItem(char *name, menupage *nextPage, application app);    // Create new menu item

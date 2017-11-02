@@ -23,7 +23,7 @@ void initPWN(void) {
 
 	// Set TOP PWM counter value
 	// UNTESTED
-	ICR1 = PWM_TOP
+	ICR1 = PWM_TOP;
 	//ICR1H = PWM_TOP >> 8;
 	//ICR1L = (uint8_t)PWM_TOP;
 }

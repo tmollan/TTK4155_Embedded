@@ -1,14 +1,15 @@
 /*
 
-CAN.h
+GAME.h
 
 */
 
-#ifndef CAN_H_
-#define CAN_H_
+#ifndef GAME_H_
+#define GAME_H_
 
 // Includes
 #include <stdint.h>
+#include <stdlib.h>
 #include <string.h>
 #include "menu.h"
 #include "CAN.h"
@@ -55,7 +56,7 @@ void exitGame(gameInfo *game);
 void updateGameScreen(gameInfo *game);
 void sendGameInfo(gameInfo *game);
 void getGameInfo(gameInfo *game);
-void setDifficulty(int8_t diff);
+void setDifficulty(gameInfo *game, int8_t diff);
 
 
-#endif /* CAN_H_ */
+#endif /* GAME_H_ */
