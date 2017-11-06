@@ -182,7 +182,7 @@ menupage * newMenu(menupage *prevPage) {
 }
 
 // Function to create a new list item on a menu page
-menuitem * newItem(char *name, menupage *nextPage, application app) {
+menuitem * newItem(const char *name, menupage *nextPage, application app) {
     menuitem *myItem = malloc(sizeof(menuitem));
     if (myItem == NULL) {
         printf("malloc error\n");

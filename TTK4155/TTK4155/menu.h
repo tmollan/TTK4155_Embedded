@@ -49,7 +49,7 @@ void exitApp(menupage *menu);                   // Exits app and enters menu
 void gotoGameApp();								// Changes app
 void navigateMenu(menupage **currentMenu);      // Menu navigation
 menupage * newMenu(menupage *prevPage);         // Create new menu page
-menuitem * newItem(char *name, menupage *nextPage, application app);    // Create new menu item
+menuitem * newItem(const char *name, menupage *nextPage, application app);    // Create new menu item
 
 
 #endif /* MENU_H_ */
