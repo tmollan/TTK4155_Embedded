@@ -22,10 +22,7 @@ void initPWM(void) {
 	clearBit(TCCR1B, CS12);
 
 	// Set TOP PWM counter value
-	// UNTESTED
 	ICR1 = PWM_TOP;
-	//ICR1H = PWM_TOP >> 8;
-	//ICR1L = (uint8_t)PWM_TOP;
 }
 
 void driveServo(int8_t pos) {
@@ -38,8 +35,5 @@ void driveServo(int8_t pos) {
 	uint16_t midPos = PWM_TOP * 1.5/20;
 	int16_t corr = PWM_TOP * 0.6/20 * pos/100;
 
-	// UNTESTED
 	OCR1A = midPos + corr;
-	//OCR1AH = (midPos + corr) >> 8;
-	//OCR1AL = (uint8_t)(midPos + corr);
 }

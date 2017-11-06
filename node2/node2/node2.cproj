@@ -144,6 +144,12 @@
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="motor.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="motor.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="PWM.c">
       <SubType>compile</SubType>
     </Compile>
@@ -157,6 +163,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="SPI.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="TWI.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="TWI.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>
