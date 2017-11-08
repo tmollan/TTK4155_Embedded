@@ -31,9 +31,9 @@ typedef union {
 				mode : 1,
                 difficulty : 2,
                 newGame : 1,
-				usused3 : 1,
-				unused2 : 1,
-				unused1 : 1;
+				lButtonPressed : 1,
+				rButtonPressed : 1,
+				jButtonPressed : 1;
     };
 } gameFlags;
 

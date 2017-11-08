@@ -51,7 +51,7 @@ typedef enum {
 	RIGHTBUTTON		// 2
 } button;
 
-// Struct for declaring joystick variables
+// For declaring joystick variables
 typedef struct {
 	int xPos;		// x-position of joystick
 	int yPos;		// y-position of joystick
@@ -59,7 +59,7 @@ typedef struct {
 	direction dir;	// Direction enum: LEFT, RIGHT, UP, DOWN, NEUTRAL
 } joystick;
 
-// Struct for declaring sliders variables
+// For declaring sliders variables
 typedef struct {
 	int leftPos;	// Position of left slider
 	int rightPos;	// Position of right slider

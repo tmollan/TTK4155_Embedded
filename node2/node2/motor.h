@@ -15,46 +15,47 @@ motor.h
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include "TWI.h"
+#include "PID.h"
 
 
 // Defines
-#define TWI_GEN_CALL 0x00  // The General Call address is 0
+#define TWI_GEN_CALL 0x00       // The General Call address is 0
 
-// Sample TWI transmission commands
-#define TWI_CMD_WRITE 0x00
-#define TWI_CMD_MASTER_READ 0x20
-
-// Sample TWI transmission states, used in the main application.
-#define SEND_DATA 0x01
-#define REQUEST_DATA 0x02
-#define READ_DATA_FROM_BUFFER 0x03
+// TWI transmission command
+#define TWI_CMD_MASTER_WRITE 0x00
 
 // TWI slave address
-#define TWI_SLAVEADDR 0x50
+#define TWI_SLAVEADDR 0x50      // 0b0101000(0) where (0) is R/W bit
 
-// Encoder
-#define DDRENCODER DDRH
+// Encoder pins
+#define DDRENC DDRH
+#define PORTENC PORTH
 #define DIRPIN PINH1
 #define SELPIN PINH3
 #define ENPIN PINH4
 #define OEPIN PINH5
 #define RSTPIN PINH6
+#define EDATA PINK
 
-// Solenoid
+// Solenoid pin
 #define DDRSOL DDRB
 #define PORTSOL PORTB
 #define SOLPIN PINB7
 
 
+// Typedefs
+typedef enum {
+    MOTOR_CW,       // Clockwise
+    MOTOR_CCW       // Counter-clockwise
+} motorDirection;
+
+
 // Functions
 void initMotor(void);
-void sendGeneralCallTWI(void);
-void sendReadCommandTWI(uint8_t *msgBuffer);
-uint8_t readTWI(void);
 void writeTWI(uint8_t data);
+void setMotorDirection(motorDirection dir);
+void runMotor(int8_t ref, PIDcontroller *PID);
 int16_t readEncoder(void);
-void runMotor(int8_t speed);
-int8_t motorControl(int8_t ref);
 void triggerSolenoid(void);
 
 

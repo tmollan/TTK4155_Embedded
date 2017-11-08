@@ -53,7 +53,6 @@ int main(void) {
 	menupage *gameMenu = malloc(sizeof(menupage));
 	initGameMenu(&gameMenu);
 
-
 	while (1) {
 
 		// If menu mode is active
@@ -77,7 +76,15 @@ int main(void) {
 						default:
 							getGameInfo(game);
 							updateGameScreen(game);
-							if (game->lives == 0) endGame(game, gameMenu);
+							updateButtonStates(game);
+
+							if (buttonPressed(LEFTBUTTON)) {
+								game->flags.mode = GAME_OFF;
+								loadMenu(currentMenuIndex, gameMenu);
+							} else if (game->lives == 0) {
+								endGame(game, gameMenu);
+							}
+							
 							sendGameInfo(game);
 					}
 					break;
@@ -109,7 +116,7 @@ int main(void) {
 					refreshOLED();
 					_delay_ms(25);	// Speed of drawing
 
-					if (buttonPressed(LEFTBUTTON) && buttonPressed(RIGHTBUTTON)) exitApp(currentMenu);
+					if (buttonPressed(LEFTBUTTON)) exitApp(currentMenu);
 					break;
 
 

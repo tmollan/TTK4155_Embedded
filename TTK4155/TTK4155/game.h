@@ -34,9 +34,9 @@ typedef union {
 				mode : 1,
                 difficulty : 2,
                 newGame : 1,
-				usused3 : 1,
-				unused2 : 1,
-				unused1 : 1;
+				lButtonPressed : 1,
+				rButtonPressed : 1,
+				jButtonPressed : 1;
     };
 } gameFlags;
 
@@ -54,6 +54,7 @@ void startGame(gameInfo *game);
 void endGame(gameInfo *game, menupage *menu);
 void exitGame(gameInfo *game);
 void updateGameScreen(gameInfo *game);
+void updateButtonStates(gameInfo *game);
 void sendGameInfo(gameInfo *game);
 void getGameInfo(gameInfo *game);
 void setDifficulty(gameInfo *game, int8_t diff);

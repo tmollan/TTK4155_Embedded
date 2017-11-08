@@ -87,6 +87,24 @@ void updateGameScreen(gameInfo *game) {
 	setFont(tempFont);
 }
 
+void updateButtonStates(gameInfo *game) {
+    if (!game->flags.lButtonPressed && buttonPressed(LEFTBUTTON)) {
+        game->flags.lButtonPressed = 1;
+    } else if (game->flags.lButtonPressed && !buttonPressed(LEFTBUTTON)) {
+        game->flags.lButtonPressed = 0;
+    }
+    if (!game->flags.rButtonPressed && buttonPressed(RIGHTBUTTON)) {
+        game->flags.rButtonPressed = 1;
+    } else if (game->flags.rButtonPressed && !buttonPressed(RIGHTBUTTON)) {
+        game->flags.rButtonPressed = 0;
+    }
+    if (!game->flags.jButtonPressed && buttonPressed(JOYSTICK)) {
+        game->flags.jButtonPressed = 1;
+    } else if (game->flags.jButtonPressed && !buttonPressed(JOYSTICK)) {
+        game->flags.jButtonPressed = 0;
+    }
+}
+
 void sendGameInfo(gameInfo *game) {
     joystick myJoystick = getJoystick();
 	//sliders mySliders = getSliders();
