@@ -4,6 +4,7 @@
 
 
 void initMotor(void) {
+
 	// Initializes Serial Interface TWI/I2C
 	setBit(TWCR, TWEN);			// Enable 2-wire Serial Interface (SCL, SDA)
 	setBit(PORTD, PIND0);		// Enable pull-up (SCL)
@@ -11,7 +12,7 @@ void initMotor(void) {
 	TWI_Master_Initialise();
 	sei();
 
-	// Initialize motor interface
+	// Initialize motor interface/encoder
 	makeOutput(DDRENC, DIRPIN);		// Motor dir. (0 = clockwise, 1 = counter-clockwise)
 	makeOutput(DDRENC, SELPIN);		// Select high/low byte (0 = high, 1 = low)
 	makeOutput(DDRENC, ENPIN);		// Motor enable
@@ -19,6 +20,7 @@ void initMotor(void) {
 	makeOutput(DDRENC, RSTPIN);		// Reset encoder
 	DDRK = 0x00;					// Make all K-pins inputs
 
+	//setBit(PORTENC, RSTPIN);		// Enable encoder counter
 	//setBit(PORTENC, ENPIN);			// Enable motor
 
 	// Initialize solenoid
@@ -57,7 +59,7 @@ void runMotor(int8_t ref, PIDcontroller *PID) {
 			speed = 0xFF * ref/100;
 			break;
 		default:	// case FEEDBACK
-			speed = 0xFF * PIDcontroller(ref, readEncoder(), PID) /INT16_MAX;
+			speed = 0xFF * PIDcontrol(ref, readEncoder(), PID) / INT16_MAX;
 	}
 
 	if (speed < 0) {
@@ -84,7 +86,9 @@ int16_t readEncoder(void) {
 
 	data |= EDATA;				// Read LSB
 
-	//toggleBit(PORTENC, RSTPIN);	// Toggle !RST to reset encoder
+	//clearBit(PORTENC, RSTPIN);	// Resets encoder counter
+	//setBit(PORTENC, RSTPIN);	// Enable encoder counter
+
 	setBit(PORTENC, OEPIN);		// Set !OE high to disable output of encoder
 
 	return data;

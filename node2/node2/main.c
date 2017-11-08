@@ -17,13 +17,6 @@
 #include "PID.h"
 #include "game.h"
 
-// Defines
-// PID parameters
-#define P_GAIN 1		// Proportional gain
-#define I_TIME 1000		// Integral time 	[s]
-#define D_TIME 0		// Derivative time 	[s]
-#define S_TIME 10		// Sample time 		[ms]
-
 
 int main(void) {
 	// For printf() functionality
@@ -58,7 +51,7 @@ int main(void) {
 		prevFlags.byte = game->flags.byte;
 		getGameInfo(game);
 
-		setControllerMode(OPEN_LOOP, PID);
+		setModePID(OPEN_LOOP, PID);
 		runMotor(game->joyPos, PID);
 		printf("Encoder: %d\n", readEncoder());
 

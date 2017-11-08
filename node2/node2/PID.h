@@ -13,7 +13,13 @@ PID.h
 
 
 // Defines
-#define SCALING_FACTOR 128
+// PID parameters
+#define P_GAIN 1		// Proportional gain
+#define I_TIME 1000		// Integral time 	[s]
+#define D_TIME 0		// Derivative time 	[s]
+#define S_TIME 10		// Sample time 		[ms]
+
+#define SCALING_FACTOR 128  // For more precise control
 
 
 // Typedefs
@@ -35,10 +41,10 @@ typedef struct {
 
 
 // Functions
-void initPID(int16_t Kp, int16_t Ti, int16_t Td, int16_t T, PIDcontroller *PID);
+void initPID(int16_t Kp, int16_t Ti, int16_t Td, int16_t Ts_ms, PIDcontroller *PID);
 void setModePID(controllerMode mode, PIDcontroller *PID);
-void setParamPID(int16_t Kp, int16_t Ti, int16_t Td, int16_t T, PIDcontroller *PID);
-int16_t PIDcontroller(int16_t setPoint, int16_t processValue, PIDcontroller *PID);
+void setParamPID(int16_t Kp, int16_t Ti, int16_t Td, int16_t Ts_ms, PIDcontroller *PID);
+int16_t PIDcontrol(int16_t setPoint, int16_t processValue, PIDcontroller *PID);
 
 
 #endif /* PID_H_ */

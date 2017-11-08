@@ -41,7 +41,7 @@ void setParamPID(int16_t Kp, int16_t Ti, int16_t Td, int16_t Ts_ms, PIDcontrolle
 }
 
 
-int16_t PIDcontroller(int16_t setPoint, int16_t processValue, PIDcontroller *PID) {
+int16_t PIDcontrol(int16_t setPoint, int16_t processValue, PIDcontroller *PID) {
 	int16_t error = setPoint - processValue;   // e(k) = r(k) - y(k)
 
 	// Calculating proportional term and limiting overflow
