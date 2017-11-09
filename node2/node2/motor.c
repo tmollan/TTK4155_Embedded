@@ -2,7 +2,7 @@
 // Includes
 #include "motor.h"
 
-
+int16_t encoderMax = 0;
 void initMotor(void) {
 
 	// Initializes Serial Interface TWI/I2C
@@ -20,8 +20,10 @@ void initMotor(void) {
 	makeOutput(DDRENC, RSTPIN);		// Reset encoder
 	DDRK = 0x00;					// Make all K-pins inputs
 
-	//setBit(PORTENC, RSTPIN);		// Enable encoder counter
-	//setBit(PORTENC, ENPIN);			// Enable motor
+	setBit(PORTENC, RSTPIN);		// Enable encoder counter
+	setBit(PORTENC, ENPIN);			// Enable motor
+	
+	encoderMax = calibrateEncoderMax();
 
 	// Initialize solenoid
 	makeOutput(DDRSOL, SOLPIN);		// Enable solenoid output pin
@@ -59,7 +61,7 @@ void runMotor(int8_t ref, PIDcontroller *PID) {
 			speed = 0xFF * ref/100;
 			break;
 		default:	// case FEEDBACK
-			speed = 0xFF * PIDcontrol(ref, readEncoder(), PID) / INT16_MAX;
+			speed = PIDcontrol(encoderMax/2/100*(ref+100), readEncoder(), PID);
 	}
 
 	if (speed < 0) {
@@ -68,7 +70,7 @@ void runMotor(int8_t ref, PIDcontroller *PID) {
 		setMotorDirection(MOTOR_CW);	// Set clockwise direction
 	}
 
-	writeTWI((uint8_t)abs(speed));
+	//writeTWI((uint8_t)abs(speed));
 }
 
 
@@ -94,11 +96,53 @@ int16_t readEncoder(void) {
 	return data;
 }
 
+int16_t calibrateEncoderMax(void) {
+	int16_t currentVal = readEncoder();
+	int16_t lastVal = currentVal + 100;
+	
+	
+	setMotorDirection(MOTOR_CW);
+	while (currentVal != lastVal) {
+		writeTWI(90);
+		lastVal = currentVal;
+		currentVal = readEncoder();
+		_delay_ms(1000);
+	}
+	
+	clearBit(PORTENC, RSTPIN);	// Resets encoder counter
+	setBit(PORTENC, RSTPIN);	// Enable encoder counter
+	
+	currentVal = readEncoder();
+	setMotorDirection(MOTOR_CCW);
+	while (currentVal != lastVal) {
+		writeTWI(90);
+		lastVal = currentVal;
+		currentVal = readEncoder();
+		_delay_ms(1000);
+	}
+	
+	int16_t temp = currentVal;
+	
+	currentVal = readEncoder();
+	setMotorDirection(MOTOR_CW);
+	while (currentVal != temp/2) {
+		writeTWI(90);
+		currentVal = readEncoder();
+		_delay_ms(1000);
+	}
+	writeTWI(0);
+	
+	clearBit(PORTENC, RSTPIN);	// Resets encoder counter
+	setBit(PORTENC, RSTPIN);	// Enable encoder counter
+	
+	return currentVal;
+}
+
 
 // Triggers a solenoid pulse
 void triggerSolenoid(void) {
 	clearBit(PORTSOL, SOLPIN);
 	_delay_ms(50);
 	setBit(PORTSOL, SOLPIN);
-	_delay_ms(50);
+	//_delay_ms(50);
 }

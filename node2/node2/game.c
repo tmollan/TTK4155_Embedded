@@ -30,7 +30,24 @@ void sendGameInfo(gameInfo *game) {
     transmitCAN(msg);
 }
 
-int8_t ballDetected(void) {
-    if (readADC() < 50) return 1;
+int8_t ballDetected(filter *ballFilter) {
+	// Simple filter
+	ballFilter->sampleSum += readADC()*10;
+	ballFilter->samples++;
+	if (ballFilter->samples == 20) {
+		if (ballFilter->sampleSum / ballFilter->samples < 150 && !ballFilter->detected) {
+			ballFilter->detected = 1;
+			ballFilter->sampleSum = 0;
+			ballFilter->samples = 0;
+			return 1;
+		} else if (ballFilter->detected) {
+			_delay_ms(500);
+			if (ballFilter->sampleSum / ballFilter->samples >= 150) {
+				ballFilter->detected = 0;
+			}
+		}
+		ballFilter->sampleSum = 0;
+		ballFilter->samples = 0;
+	}
 	return 0;
 }

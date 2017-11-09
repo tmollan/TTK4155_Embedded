@@ -43,7 +43,8 @@ void setParamPID(int16_t Kp, int16_t Ti, int16_t Td, int16_t Ts_ms, PIDcontrolle
 
 int16_t PIDcontrol(int16_t setPoint, int16_t processValue, PIDcontroller *PID) {
 	int16_t error = setPoint - processValue;   // e(k) = r(k) - y(k)
-
+	printf("process: %d\n", processValue);
+	
 	// Calculating proportional term and limiting overflow
     int16_t pTerm;
 	if (error > PID->maxError) {
@@ -71,7 +72,7 @@ int16_t PIDcontrol(int16_t setPoint, int16_t processValue, PIDcontroller *PID) {
 	// Calculating derivative term - Kd * (y(k) - y(k-1))
     int16_t dTerm = PID->dGain * (processValue - PID->prevProcessValue);
 	PID->prevProcessValue = processValue;  // Updating previous value y(k-1)
-
+	
 	// Calculate and limit output
     int32_t output = (pTerm + iTerm + dTerm) / SCALING_FACTOR;
 	if (output > INT16_MAX) {

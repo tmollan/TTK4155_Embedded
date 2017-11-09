@@ -34,26 +34,29 @@ int main(void) {
 	PIDcontroller *PID = malloc(sizeof(PIDcontroller));
 	if (PID == NULL) printf("PID malloc failed\n");
 	initPID(P_GAIN, I_TIME, D_TIME, S_TIME, PID);
+	//setModePID(OPEN_LOOP, PID);
 
 	initMotor();
 
 	gameInfo *game = malloc(sizeof(gameInfo));
 	if (game == NULL) printf("game malloc failed\n");
 	initGame(game);
-
-
-
-	int8_t ballPresent = 0;
-	int16_t ballCount = 0;
-	gameFlags prevFlags;
+	
+	
+	filter *ball = malloc(sizeof(filter));
+	if (ball == NULL) printf("ball malloc failed\n");
+	
+	gameFlags *prevFlags = malloc(sizeof(gameFlags));
+	if (prevFlags == NULL) printf("prevFlag malloc failed\n");
 
     while (1) {
-		prevFlags.byte = game->flags.byte;
+		prevFlags->byte = game->flags.byte;
 		getGameInfo(game);
-
-		setModePID(OPEN_LOOP, PID);
-		runMotor(game->joyPos, PID);
-		printf("Encoder: %d\n", readEncoder());
+		
+		/*if (ballDetected(ball)) {
+			ball->count++;
+			printf("Balls detected: %d\n", ball->count);
+		}*/
 
 		if (game->flags.mode == GAME_ON) {
 			driveServo(game->joyPos);
@@ -64,21 +67,14 @@ int main(void) {
 				runMotor(game->joyPos, PID);
 			}
 
-			if (game->flags.lButtonPressed && !prevFlags.lButtonPressed)
+			if (game->flags.rButtonPressed && !prevFlags->rButtonPressed)
 				triggerSolenoid();
 
-			if (!ballPresent && ballDetected()) {
+			if (ballDetected(ball)) {
 				if (game->lives > 0) {
 					game->lives--;
 					sendGameInfo(game);
 				}
-
-				ballCount++;
-				ballPresent = 1;
-				printf("Balls detected: %d\n", ballCount);
-
-			} else if (ballPresent && !ballDetected()) {
-				ballPresent = 0;
 			}
 
 		}

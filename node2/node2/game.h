@@ -43,12 +43,19 @@ typedef struct {
     uint8_t lives;
 } gameInfo;
 
+typedef struct {
+	int8_t detected;
+	int8_t count;
+	int8_t samples;
+	int16_t sampleSum;
+} filter;
+
 
 // Functions
 void initGame(gameInfo *game);
 void sendGameInfo(gameInfo *game);
 void getGameInfo(gameInfo *game);
-int8_t ballDetected(void);
+int8_t ballDetected(filter *ballFilter);
 
 
 #endif /* GAME_H_ */

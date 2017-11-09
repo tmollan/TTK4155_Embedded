@@ -9,12 +9,15 @@ PID.h
 #define PID_H_
 
 // Includes
+#include "setup.h"
 #include <stdint.h>
+#include <stdlib.h>
+#include <avr/io.h>
 
 
 // Defines
 // PID parameters
-#define P_GAIN 1		// Proportional gain
+#define P_GAIN 2		// Proportional gain
 #define I_TIME 1000		// Integral time 	[s]
 #define D_TIME 0		// Derivative time 	[s]
 #define S_TIME 10		// Sample time 		[ms]
