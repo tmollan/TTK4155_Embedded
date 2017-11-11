@@ -19,7 +19,8 @@ void initMotor(void) {
 	makeOutput(DDRENC, OEPIN);		// Enable encoder output
 	makeOutput(DDRENC, RSTPIN);		// Reset encoder
 	DDRK = 0x00;					// Make all K-pins inputs
-
+	
+	clearBit(PORTENC, RSTPIN);	// Resets encoder counter
 	setBit(PORTENC, RSTPIN);		// Enable encoder counter
 	setBit(PORTENC, ENPIN);			// Enable motor
 	
@@ -61,7 +62,7 @@ void runMotor(int8_t ref, PIDcontroller *PID) {
 			speed = 0xFF * ref/100;
 			break;
 		default:	// case FEEDBACK
-			speed = PIDcontrol(encoderMax/2/100*(ref+100), readEncoder(), PID);
+			speed = PIDcontrol(encoderMax/2/100*ref, readEncoder(), PID);
 	}
 
 	if (speed < 0) {
@@ -70,7 +71,7 @@ void runMotor(int8_t ref, PIDcontroller *PID) {
 		setMotorDirection(MOTOR_CW);	// Set clockwise direction
 	}
 
-	//writeTWI((uint8_t)abs(speed));
+	writeTWI((uint8_t)abs(speed));
 }
 
 
@@ -97,38 +98,42 @@ int16_t readEncoder(void) {
 }
 
 int16_t calibrateEncoderMax(void) {
+	toggleBit(PORTENC, RSTPIN);	// Resets encoder counter
+	setBit(PORTENC, RSTPIN);	// Enable encoder counter
 	int16_t currentVal = readEncoder();
 	int16_t lastVal = currentVal + 100;
 	
 	
 	setMotorDirection(MOTOR_CW);
-	while (currentVal != lastVal) {
-		writeTWI(90);
-		lastVal = currentVal;
-		currentVal = readEncoder();
-		_delay_ms(1000);
-	}
+	writeTWI(100);
+	_delay_ms(1000);
+	printf("enc: %d\nlast: %d\n", readEncoder(), lastVal);
 	
-	clearBit(PORTENC, RSTPIN);	// Resets encoder counter
-	setBit(PORTENC, RSTPIN);	// Enable encoder counter
+	toggleBit(PORTENC, RSTPIN);	// Resets encoder counter
+	//setBit(PORTENC, RSTPIN);	// Enable encoder counter
+	
+	printf("enc: %d\nlast: %d\n", readEncoder(), lastVal);
+	
 	
 	currentVal = readEncoder();
 	setMotorDirection(MOTOR_CCW);
 	while (currentVal != lastVal) {
-		writeTWI(90);
+		writeTWI(100);
 		lastVal = currentVal;
 		currentVal = readEncoder();
-		_delay_ms(1000);
+		_delay_ms(3000);
 	}
+	printf("left: %d", readEncoder());
 	
 	int16_t temp = currentVal;
 	
 	currentVal = readEncoder();
 	setMotorDirection(MOTOR_CW);
-	while (currentVal != temp/2) {
-		writeTWI(90);
+	while (currentVal <= temp/2) {
+		writeTWI(100);
 		currentVal = readEncoder();
-		_delay_ms(1000);
+		printf("right: %d", currentVal);
+		//_delay_ms(1000);
 	}
 	writeTWI(0);
 	
@@ -144,5 +149,5 @@ void triggerSolenoid(void) {
 	clearBit(PORTSOL, SOLPIN);
 	_delay_ms(50);
 	setBit(PORTSOL, SOLPIN);
-	//_delay_ms(50);
+	_delay_ms(50);
 }

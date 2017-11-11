@@ -32,6 +32,7 @@ void sendGameInfo(gameInfo *game) {
 
 int8_t ballDetected(filter *ballFilter) {
 	// Simple filter
+	printf("ball: %d\n", readADC());
 	ballFilter->sampleSum += readADC()*10;
 	ballFilter->samples++;
 	if (ballFilter->samples == 20) {
@@ -41,7 +42,7 @@ int8_t ballDetected(filter *ballFilter) {
 			ballFilter->samples = 0;
 			return 1;
 		} else if (ballFilter->detected) {
-			_delay_ms(500);
+			//_delay_ms(500);
 			if (ballFilter->sampleSum / ballFilter->samples >= 150) {
 				ballFilter->detected = 0;
 			}

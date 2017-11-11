@@ -17,9 +17,9 @@ PID.h
 
 // Defines
 // PID parameters
-#define P_GAIN 2		// Proportional gain
-#define I_TIME 1000		// Integral time 	[s]
-#define D_TIME 0		// Derivative time 	[s]
+#define P_GAIN 8		// Proportional gain
+#define I_TIME 10		// Integral time 	[s]
+#define D_TIME 1000		// Derivative time 	[s]
 #define S_TIME 10		// Sample time 		[ms]
 
 #define SCALING_FACTOR 128  // For more precise control

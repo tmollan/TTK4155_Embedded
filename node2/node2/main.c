@@ -53,13 +53,15 @@ int main(void) {
 		prevFlags->byte = game->flags.byte;
 		getGameInfo(game);
 		
+		//printf("enc: %d", readEncoder());
+		
 		/*if (ballDetected(ball)) {
 			ball->count++;
 			printf("Balls detected: %d\n", ball->count);
 		}*/
 
 		if (game->flags.mode == GAME_ON) {
-			driveServo(game->joyPos);
+			driveServo(-game->joyPos);
 
 			// If compare match flag for PID sampling timer is set
 			if (testBit(TIFR3, OCF3A)) {
@@ -70,12 +72,12 @@ int main(void) {
 			if (game->flags.rButtonPressed && !prevFlags->rButtonPressed)
 				triggerSolenoid();
 
-			if (ballDetected(ball)) {
+			/*if (ballDetected(ball)) {
 				if (game->lives > 0) {
 					game->lives--;
 					sendGameInfo(game);
 				}
-			}
+			}*/
 
 		}
 

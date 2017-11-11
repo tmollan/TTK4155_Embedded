@@ -7,9 +7,9 @@ void initPID(int16_t Kp, int16_t Ti, int16_t Td, int16_t Ts_ms, PIDcontroller *P
     PID->mode = FEEDBACK;
     PID->sumError = 0;
     PID->prevProcessValue = 0;
-    PID->pGain = SCALING_FACTOR * Kp;                       // Proportional gain
-    PID->iGain = SCALING_FACTOR * Kp * Ts_ms/1000 / Ti;     // Integral gain
-    PID->dGain = SCALING_FACTOR * Kp * Td / Ts_ms/1000;     // Derivative gain
+    PID->pGain = SCALING_FACTOR * Kp/100;                       // Proportional gain
+    PID->iGain = SCALING_FACTOR * Kp/100 * Ts_ms/1000 / Ti/100;     // Integral gain
+    PID->dGain = SCALING_FACTOR * Kp/100 * Td/100 / Ts_ms/1000;     // Derivative gain
     PID->maxError = INT16_MAX / (PID->pGain + 1);
     PID->maxSumError = INT32_MAX / 2 / (PID->iGain + 1);
 
@@ -42,8 +42,7 @@ void setParamPID(int16_t Kp, int16_t Ti, int16_t Td, int16_t Ts_ms, PIDcontrolle
 
 
 int16_t PIDcontrol(int16_t setPoint, int16_t processValue, PIDcontroller *PID) {
-	int16_t error = setPoint - processValue;   // e(k) = r(k) - y(k)
-	printf("process: %d\n", processValue);
+	int16_t error = setPoint + processValue;   // e(k) = r(k) - y(k)
 	
 	// Calculating proportional term and limiting overflow
     int16_t pTerm;
