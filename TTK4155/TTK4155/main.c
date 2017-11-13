@@ -88,6 +88,14 @@ int main(void) {
 							sendGameInfo(game);
 					}
 					break;
+				
+				case APP_ENCODERCAL:
+					game->flags.calibrate = 1;
+					sendGameInfo(game);
+					game->flags.calibrate = 0;
+					gotoGameApp();
+					loadMenu(currentMenuIndex, gameMenu);
+					break;
 
 				case APP_GAMEDIFF:
 					setDifficulty(game, currentMenuIndex);

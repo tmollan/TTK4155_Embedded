@@ -23,6 +23,8 @@ void initPWM(void) {
 
 	// Set TOP PWM counter value
 	ICR1 = PWM_TOP;
+	
+	driveServo(0);		// Prevents servo AIDS
 }
 
 void driveServo(int8_t pos) {

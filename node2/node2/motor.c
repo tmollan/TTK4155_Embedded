@@ -121,7 +121,7 @@ int16_t calibrateEncoderMax(void) {
 
 	// Go to center
 	setMotorDirection(MOTOR_CW);
-	writeTWI(50);
+	writeTWI(80);
 	while (currentVal >= max/2) {
 		currentVal = readEncoder();
 	}

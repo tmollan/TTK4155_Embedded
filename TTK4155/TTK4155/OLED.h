@@ -27,8 +27,7 @@ typedef struct positionOLED {
 
 typedef enum {
 	FONT_BIG,
-	FONT_NORMAL,
-	FONT_SMALL
+	FONT_NORMAL
 } font;
 
 // Functions

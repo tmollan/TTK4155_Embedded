@@ -23,7 +23,8 @@ typedef enum application {
     APP_GAME,
     APP_GAMEDIFF,
     APP_NEWGAME,
-    APP_EXITGAME
+    APP_EXITGAME,
+	APP_ENCODERCAL
 } application;
 
 typedef struct menupage {

@@ -19,8 +19,7 @@ game.h
 
 // Game difficulities
 #define GDIFF_EASY 0
-#define GDIFF_MEDIUM 1
-#define GDIFF_HARD 2
+#define GDIFF_HARD 1
 
 
 // Typedefs
@@ -29,8 +28,9 @@ typedef union {
     struct {
         uint8_t loaded : 1,
 				mode : 1,
-                difficulty : 2,
+                difficulty : 1,
                 newGame : 1,
+				calibrate : 1,
 				lButtonPressed : 1,
 				rButtonPressed : 1,
 				jButtonPressed : 1;
@@ -41,6 +41,7 @@ typedef struct {
     gameFlags flags;
     int8_t joyPos;      // x-position
     uint8_t lives;
+	uint8_t sliderPos;
 } gameInfo;
 
 typedef struct {

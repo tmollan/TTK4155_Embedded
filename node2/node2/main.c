@@ -34,7 +34,6 @@ int main(void) {
 	PIDcontroller *PID = malloc(sizeof(PIDcontroller));
 	if (PID == NULL) printf("PID malloc failed\n");
 	initPID(P_GAIN, I_TIME, D_TIME, S_TIME, PID);
-	//setModePID(OPEN_LOOP, PID);
 
 	initMotor();
 
@@ -52,33 +51,40 @@ int main(void) {
     while (1) {
 		prevFlags->byte = game->flags.byte;
 		getGameInfo(game);
-		
-		//printf("enc: %d", readEncoder());
-		
-		/*if (ballDetected(ball)) {
-			ball->count++;
-			printf("Balls detected: %d\n", ball->count);
-		}*/
 
 		if (game->flags.mode == GAME_ON) {
-			driveServo(-game->joyPos);
-
+			
+			if (game->flags.difficulty == GDIFF_HARD) {
+				setModePID(FEEDBACK, PID);
+			} else {
+				setModePID(OPEN_LOOP, PID);
+			}
+			
 			// If compare match flag for PID sampling timer is set
 			if (testBit(TIFR3, OCF3A)) {
 				setBit(TIFR3, OCF3A);			// Clear flag
 				runMotor(game->joyPos, PID);
 			}
+			
+			driveServo(-(game->sliderPos*2-100));
 
-			if (game->flags.rButtonPressed && !prevFlags->rButtonPressed)
+			if (game->flags.jButtonPressed && !prevFlags->jButtonPressed)
 				triggerSolenoid();
 
-			/*if (ballDetected(ball)) {
+			if (ballDetected(ball)) {
 				if (game->lives > 0) {
 					game->lives--;
 					sendGameInfo(game);
 				}
-			}*/
+			}
 
+		} else {
+			driveServo(0);		// Center servo
+			writeTWI(0);		// Motor zero speed
+			
+			if (game->flags.calibrate && !prevFlags->calibrate) {
+				calibrateEncoderMax();
+			}
 		}
 
     }

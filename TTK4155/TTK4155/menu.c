@@ -43,13 +43,12 @@ void initMenu(menupage **menu) {
     optionsPage->length = 2;
 
     // List of items on options->font page
-    menuitem **fontItems = malloc(3 * sizeof(menuitem*));
+    menuitem **fontItems = malloc(2 * sizeof(menuitem*));
     fontItems[0] = newItem("Big", NULL, APP_FONTSIZE);
     fontItems[1] = newItem("Normal", NULL, APP_FONTSIZE);
-    fontItems[2] = newItem("Small", NULL, APP_FONTSIZE);
     fontPage->items = malloc(sizeof(fontItems));
     fontPage->items = fontItems;
-    fontPage->length = 3;
+    fontPage->length = 2;
 
     // Menu mode at startup
     *menu = homePage;

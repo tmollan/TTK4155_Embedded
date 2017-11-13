@@ -197,12 +197,8 @@ void drawCharSRAM(char ch, uint16_t address) {
 			case FONT_BIG:
 				data = pgm_read_byte(&font8[(int8_t)ch][col]);
 				break;
-			case FONT_NORMAL:
+			default:
 				data = pgm_read_byte(&font5[(int8_t)ch][col]);
-				break;
-			case FONT_SMALL:
-				data = pgm_read_byte(&font4[(int8_t)ch][col]);
-				break;
 		}
 		writeSRAM(address + col, data);
 	}
@@ -240,12 +236,8 @@ void drawInvCharSRAM(char ch, uint16_t address) {
 			case FONT_BIG:
 				data = ~pgm_read_byte(&font8[(int8_t)ch][col]);		// ~: inverts bits
 				break;
-			case FONT_NORMAL:
+			default:
 				data = ~pgm_read_byte(&font5[(int8_t)ch][col]);
-				break;
-			case FONT_SMALL:
-				data = ~pgm_read_byte(&font4[(int8_t)ch][col]);
-				break;
 		}
 		writeSRAM(address + col, data);
 	}
@@ -325,9 +317,9 @@ void drawJoystickSRAM(void) {
 	js = getJoystick();
 
 	// Prints cursor coordinates in top right corner
-	char string[10];
+	/*char string[10];
 	sprintf(string, " (%d,%d)", cursor.xPos, cursor.yPos);
-	drawStringSRAM(string, 127-strlen(string)*fontWidth);
+	drawStringSRAM(string, 127-strlen(string)*fontWidth);*/
 
 	if (js.dir != NEUTRAL) {
 
@@ -461,13 +453,8 @@ void setFont(font size) {
 			currentFont = FONT_BIG;
 			fontWidth = 8;
 			break;
-		case FONT_NORMAL:
+		default:
 			currentFont = FONT_NORMAL;
 			fontWidth = 5;
-			break;
-		case FONT_SMALL:
-			currentFont = FONT_SMALL;
-			fontWidth = 4;
-			break;
 	}
 }
