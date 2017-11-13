@@ -46,7 +46,6 @@ typedef struct {
 // Functions
 void initPID(int16_t Kp, int16_t Ti, int16_t Td, int16_t Ts_ms, PIDcontroller *PID);
 void setModePID(controllerMode mode, PIDcontroller *PID);
-void setParamPID(int16_t Kp, int16_t Ti, int16_t Td, int16_t Ts_ms, PIDcontroller *PID);
 int16_t PIDcontrol(int16_t setPoint, int16_t processValue, PIDcontroller *PID);
 
 

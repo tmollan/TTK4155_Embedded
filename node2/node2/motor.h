@@ -56,6 +56,7 @@ void writeTWI(uint8_t data);
 void setMotorDirection(motorDirection dir);
 void runMotor(int8_t ref, PIDcontroller *PID);
 int16_t readEncoder(void);
+void resetEncoder(void);
 int16_t calibrateEncoderMax(void);
 void triggerSolenoid(void);
 

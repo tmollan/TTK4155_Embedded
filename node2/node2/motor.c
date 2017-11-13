@@ -4,7 +4,6 @@
 
 int16_t encoderMax = 0;
 void initMotor(void) {
-
 	// Initializes Serial Interface TWI/I2C
 	setBit(TWCR, TWEN);			// Enable 2-wire Serial Interface (SCL, SDA)
 	setBit(PORTD, PIND0);		// Enable pull-up (SCL)
@@ -19,11 +18,10 @@ void initMotor(void) {
 	makeOutput(DDRENC, OEPIN);		// Enable encoder output
 	makeOutput(DDRENC, RSTPIN);		// Reset encoder
 	DDRK = 0x00;					// Make all K-pins inputs
-	
-	clearBit(PORTENC, RSTPIN);	// Resets encoder counter
-	setBit(PORTENC, RSTPIN);		// Enable encoder counter
+
 	setBit(PORTENC, ENPIN);			// Enable motor
-	
+	resetEncoder();					// Resets and enables encoder
+
 	encoderMax = calibrateEncoderMax();
 
 	// Initialize solenoid
@@ -89,58 +87,48 @@ int16_t readEncoder(void) {
 
 	data |= EDATA;				// Read LSB
 
-	//clearBit(PORTENC, RSTPIN);	// Resets encoder counter
-	//setBit(PORTENC, RSTPIN);	// Enable encoder counter
-
+	//resetEncoder();			// Toggle !RST to reset encoder counter
 	setBit(PORTENC, OEPIN);		// Set !OE high to disable output of encoder
 
 	return data;
 }
 
+// Resets encoder counter
+void resetEncoder(void) {
+	clearBit(PORTENC, RSTPIN);	// Reset encoder counter
+	_delay_ms(20);
+	setBit(PORTENC, RSTPIN);	// Enable encoder
+	_delay_ms(20);
+}
+
+// Calibrates encoder at middle of board
 int16_t calibrateEncoderMax(void) {
-	toggleBit(PORTENC, RSTPIN);	// Resets encoder counter
-	setBit(PORTENC, RSTPIN);	// Enable encoder counter
-	int16_t currentVal = readEncoder();
-	int16_t lastVal = currentVal + 100;
-	
-	
+	// Go to edge of rail
 	setMotorDirection(MOTOR_CW);
 	writeTWI(100);
-	_delay_ms(1000);
-	printf("enc: %d\nlast: %d\n", readEncoder(), lastVal);
-	
-	toggleBit(PORTENC, RSTPIN);	// Resets encoder counter
-	//setBit(PORTENC, RSTPIN);	// Enable encoder counter
-	
-	printf("enc: %d\nlast: %d\n", readEncoder(), lastVal);
-	
-	
-	currentVal = readEncoder();
+	_delay_ms(1500);
+
+	resetEncoder();
+
+	// Go to other edge of rail
 	setMotorDirection(MOTOR_CCW);
-	while (currentVal != lastVal) {
-		writeTWI(100);
-		lastVal = currentVal;
-		currentVal = readEncoder();
-		_delay_ms(3000);
-	}
-	printf("left: %d", readEncoder());
-	
-	int16_t temp = currentVal;
-	
-	currentVal = readEncoder();
+	writeTWI(100);
+	_delay_ms(1500);
+
+	// Save max value
+	int16_t max = readEncoder();
+	int16_t currentVal = max;
+
+	// Go to center
 	setMotorDirection(MOTOR_CW);
-	while (currentVal <= temp/2) {
-		writeTWI(100);
+	writeTWI(50);
+	while (currentVal >= max/2) {
 		currentVal = readEncoder();
-		printf("right: %d", currentVal);
-		//_delay_ms(1000);
 	}
-	writeTWI(0);
-	
-	clearBit(PORTENC, RSTPIN);	// Resets encoder counter
-	setBit(PORTENC, RSTPIN);	// Enable encoder counter
-	
-	return currentVal;
+	writeTWI(0);	// Stop
+
+	resetEncoder();
+	return max;
 }
 
 
