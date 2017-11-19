@@ -2,9 +2,10 @@
 // Includes
 #include "PWM.h"
 
+// Initializes PWM output to servo
 void initPWM(void) {
 	// Initialize output pin
-	makeOutput(DDR_PWM, PWMPIN);
+	makeOutput(DDR_PWM, PWMPIN);	// Servo pin
 
 	// Set timer mode to fast PWM with ICR register defining TOP value
 	clearBit(TCCR1A, WGM10);
@@ -23,8 +24,8 @@ void initPWM(void) {
 
 	// Set TOP PWM counter value
 	ICR1 = PWM_TOP;
-	
-	driveServo(0);		// Prevents servo AIDS
+
+	driveServo(0);		// Center servo
 }
 
 void driveServo(int8_t pos) {
@@ -34,6 +35,8 @@ void driveServo(int8_t pos) {
 	} else if (pos > 100) {
 		pos = 100;
 	}
+	
+	// Sets PWM timer compare value
 	uint16_t midPos = PWM_TOP * 1.5/20;
 	int16_t corr = PWM_TOP * 0.6/20 * pos/100;
 

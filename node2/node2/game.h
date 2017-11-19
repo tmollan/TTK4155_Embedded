@@ -23,32 +23,35 @@ game.h
 
 
 // Typedefs
+// Flags for game status
 typedef union {
     uint8_t byte;
     struct {
-        uint8_t loaded : 1,
-				mode : 1,
-                difficulty : 1,
-                newGame : 1,
-				calibrate : 1,
-				lButtonPressed : 1,
-				rButtonPressed : 1,
-				jButtonPressed : 1;
+        uint8_t loaded : 1,             // Game is loaded
+				mode : 1,               // Game mode
+                difficulty : 1,         // Game difficulty
+                newGame : 1,            // A new game is started
+				calibrate : 1,          // Calibrate is initiated
+				lButtonPressed : 1,     // Left button is pressed
+				rButtonPressed : 1,     // Right button is pressed
+				jButtonPressed : 1;     // Joy. button is pressed
     };
 } gameFlags;
 
+// Struct for game status
 typedef struct {
     gameFlags flags;
-    int8_t joyPos;      // x-position
-    uint8_t lives;
-	uint8_t sliderPos;
+    int8_t joyPos;         // x-position
+    uint8_t lives;         // Remaining lives
+	uint8_t sliderPos;     // 0-100 %
 } gameInfo;
 
+// Struct for IR sensor filtering
 typedef struct {
-	int8_t detected;
-	int8_t count;
-	int8_t samples;
-	int16_t sampleSum;
+	int8_t detected;       // Detection
+	int8_t count;          // Number of detections
+	int8_t samples;        // Number of samples
+	int16_t sampleSum;     // Sum of all sample values
 } filter;
 
 

@@ -418,7 +418,7 @@ void setCursor(uint8_t page, uint8_t column) {
 	}
 }
 
-// Draws an animated check mark
+// Draws a self-made check mark
 void drawCheckMark(void) {
 	for (int16_t i = 0; i < 1024; i++) {
 		uint8_t data = pgm_read_byte(&checkmark[i]);

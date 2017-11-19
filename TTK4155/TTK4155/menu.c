@@ -10,7 +10,7 @@
 #include "menu.h"
 #include "joystick.h"
 
-
+// Initializes main menu pages and items
 void initMenu(menupage **menu) {
     // Creates menu pages (with links to previous pages)
     menupage *homePage = newMenu(NULL);

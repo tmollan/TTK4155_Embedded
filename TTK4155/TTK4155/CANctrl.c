@@ -75,7 +75,8 @@ void setModeCAN(uint8_t mode) {
 uint8_t inModeCAN(uint8_t mode) {
 	uint8_t currentMode = getModeCAN();
 	if (currentMode != mode) {
-		/*switch (mode) {
+		/* For troubleshooting
+		switch (mode) {
 			case MODE_NORMAL:
 				printf("CAN is NOT in Normal Operation mode: CANSTAT = 0x%.2x\n", currentMode);
 				break;

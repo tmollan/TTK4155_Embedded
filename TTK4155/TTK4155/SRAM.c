@@ -29,7 +29,7 @@ uint8_t readSRAM(uint16_t address) {
 	return ext_ram[address];						// Reads data from address
 }
 
-
+/*
 // testSRAM() verifies that the SRAM IC is working properly
 // by comparing sent data with recieved data
 void testSRAM(void) {
@@ -70,4 +70,4 @@ void testSRAM(void) {
 		}
 	}
 	printf("SRAM test completed with\n%4d errors in write phase and\n%4d errors in retrieval phase\n\n", write_errors, retrieval_errors);
-}
+}*/

@@ -65,6 +65,7 @@ typedef struct {
 	int rightPos;	// Position of right slider
 } sliders;
 
+
 // Functions
 void initJoystick(void);		// Calibrates and initializes joystick
 int getAngle(void);				// Returns angle of joystick

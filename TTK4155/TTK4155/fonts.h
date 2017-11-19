@@ -2,7 +2,7 @@
 
 fonts.h
 Library of fonts
-Large: 8x8, normal: 5x7 and small: 4x7
+Large: 8x8 and normal: 5x7
 
 */
 

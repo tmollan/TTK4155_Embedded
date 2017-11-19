@@ -7,7 +7,6 @@ EEPROM.h
 #ifndef EEPROM_H_
 #define EEPROM_H_
 
-// Includes
 
 // Functions
 void writeEEPROM(uint16_t address, uint8_t data);   // Writes to EEPROM

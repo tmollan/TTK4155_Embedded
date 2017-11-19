@@ -14,6 +14,7 @@ uint8_t xMidPos = 0x00, yMidPos = 0x00;
 uint8_t xMax = 0x00, yMax = 0x00, xMin = 0xFF, yMin = 0xFF;
 
 
+// Initializes joystick
 void initJoystick(void) {
 	// Sets pins on MCU to inputs
 	makeInput(DDRB, PINB0);		// Joystick button
@@ -34,7 +35,7 @@ void initJoystick(void) {
 	printf("Joystick calibrated\n");
 }
 
-
+// Gets angle of joystick
 int getAngle(void) {
 	// Reads joystick positions (0 to 255) and subtracts to get (~-128 to 127)
 	int16_t xPos = readADC(XCH) - xMidPos;
@@ -51,7 +52,7 @@ int getAngle(void) {
 	return angle;		// Return angle in degrees [0, 360]
 }
 
-
+// Gets all joystick info
 joystick getJoystick(void) {
 	joystick js;
 
@@ -87,7 +88,7 @@ joystick getJoystick(void) {
 	return js;
 }
 
-
+// Gets both slider positions
 sliders getSliders(void) {
 	sliders s;
 
@@ -115,7 +116,7 @@ int8_t buttonPressed(button b) {
 	}
 }
 
-
+// Calibrates joystick axis
 void calibrateJoystick(void) {
 	printf("Calibrating joystick!\n");
 	// Reads center position 100 times and finds average
@@ -130,14 +131,16 @@ void calibrateJoystick(void) {
 	// Calibrates the max and min positions
 	printf("Move joystick around, and press down when done.\n");
 
+	// Prints to OLED
 	int8_t tempFont = currentFont;
 	setFont(FONT_NORMAL);
-	char *string = "Calibrating joystick!\nMove joystick around, and press down when done.";
+	char *string = "Move joystick around, and press down when done.";
 	uint16_t address = posAddressSRAM(1, 0);
 	drawStringSRAM(string, address);
 	refreshOLED();
 	setFont(tempFont);
 
+	// Updates max values while joystick is not pressed
 	while(!buttonPressed(JOYSTICK)) {
 		uint8_t xPos = readADC(XCH);
 		uint8_t yPos = readADC(YCH);
@@ -148,7 +151,7 @@ void calibrateJoystick(void) {
 		if (yPos < yMin) yMin = yPos;
 	}
 
-	// Writes obtained parameters to EEPROM
+	// Writes obtained values to EEPROM
 	writeEEPROM(EEAXMAX, xMax);		// Maximum value of x
 	writeEEPROM(EEAXMIN, xMin);		// Minimum value of x
 	writeEEPROM(EEAXMID, xMidPos);	// Center value of x

@@ -26,25 +26,28 @@ GAME.h
 #define GDIFF_HARD 1
 
 // Typedefs
+// Flags for game status
 typedef union {
     uint8_t byte;
     struct {
-        uint8_t loaded : 1,
-				mode : 1,
-                difficulty : 1,
-                newGame : 1,
-				calibrate : 1,
-				lButtonPressed : 1,
-				rButtonPressed : 1,
-				jButtonPressed : 1;
+        uint8_t loaded : 1,             // Game is loaded
+				mode : 1,               // Game mode
+                difficulty : 1,         // Game difficulty
+                newGame : 1,            // A new game is started
+				calibrate : 1,          // Calibrate is initiated
+				lButtonPressed : 1,     // Left button is pressed
+				rButtonPressed : 1,     // Right button is pressed
+				jButtonPressed : 1;     // Joy. button is pressed
     };
 } gameFlags;
 
+// Struct for game status
 typedef struct {
     gameFlags flags;
     int8_t joyPos;      // x-position
-    uint8_t lives;
+    uint8_t lives;      // Remaining lives
 } gameInfo;
+
 
 // Functions
 void initGameMenu(menupage **menu);

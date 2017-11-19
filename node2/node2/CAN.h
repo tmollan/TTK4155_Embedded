@@ -13,10 +13,11 @@ CAN.h
 #include "CANctrl.h"
 
 // Defines
+// CAN frame IDs
 #define NO_MESSAGE 0x0000
 #define GAME_MESSAGE 0x0001
 
-
+// Struct for a CAN frame
 typedef struct {
 	union {
 		uint8_t idBytes[2];
@@ -29,6 +30,7 @@ typedef struct {
 	};
 } CANmessage;
 
+// Flags for checking CAN buffer availabilities
 typedef union {
 	uint8_t byte;
 	struct {

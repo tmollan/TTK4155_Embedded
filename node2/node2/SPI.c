@@ -26,7 +26,6 @@ uint8_t transmitSPI(uint8_t data) {
 	return SPDR;				// Received data is in transmission buffer
 }
 
-
 void selectSlave(void) {
 	clearBit(PORT_SPI, SSPIN);
 }

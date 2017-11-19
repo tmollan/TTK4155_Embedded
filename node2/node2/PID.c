@@ -2,7 +2,7 @@
 // Includes
 #include "PID.h"
 
-
+// Initializes a given PID controller with given parameters
 void initPID(int16_t Kp, int16_t Ti_ms, int16_t Td_ms, int16_t Ts_ms, PIDcontroller *PID) {
     PID->mode = FEEDBACK;
     PID->sumError = 0;

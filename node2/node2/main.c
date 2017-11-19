@@ -23,65 +23,75 @@ int main(void) {
 	stdout = &mystdout;		// Redirect stdout to UART
 	stdin = &mystdin;		// Redirect stdin to UART
 
-	initUART(MYUBRR);
+	initUART(MYUBRR);		// Computer comm.
+	initCAN(MODE_NORMAL);	// Node 1 CAN bus comm.
 
-	initCAN(MODE_NORMAL);
+	initPWM();		// PWM for servo control
+	initADC();		// IR sensor readings
 
-	initPWM();
-
-	initADC();
-
+	// Motor and PID controller
 	PIDcontroller *PID = malloc(sizeof(PIDcontroller));
-	if (PID == NULL) printf("PID malloc failed\n");
 	initPID(P_GAIN, I_TIME, D_TIME, S_TIME, PID);
-
 	initMotor();
 
 	gameInfo *game = malloc(sizeof(gameInfo));
-	if (game == NULL) printf("game malloc failed\n");
 	initGame(game);
-	
-	
+
+	// For ball detection
 	filter *ball = malloc(sizeof(filter));
-	if (ball == NULL) printf("ball malloc failed\n");
-	
+
+	// For comparing current and previous flags
 	gameFlags *prevFlags = malloc(sizeof(gameFlags));
-	if (prevFlags == NULL) printf("prevFlag malloc failed\n");
 
+
+	// Main loop
     while (1) {
-		prevFlags->byte = game->flags.byte;
-		getGameInfo(game);
 
+		// Remember previous status flags
+		prevFlags->byte = game->flags.byte;
+
+		getGameInfo(game);		// Get game info from node 1
+
+
+		// If game is ON
 		if (game->flags.mode == GAME_ON) {
-			
+
+			// Set game difficulty
 			if (game->flags.difficulty == GDIFF_HARD) {
-				setModePID(FEEDBACK, PID);
+				setModePID(FEEDBACK, PID);		// Hard
 			} else {
-				setModePID(OPEN_LOOP, PID);
+				setModePID(OPEN_LOOP, PID);		// Easy
 			}
-			
-			// If compare match flag for PID sampling timer is set
+
+			// If timer compare match flag for PID sampling is set
 			if (testBit(TIFR3, OCF3A)) {
 				setBit(TIFR3, OCF3A);			// Clear flag
 				runMotor(game->joyPos, PID);
 			}
-			
-			driveServo(-(game->sliderPos*2-100));
 
+			// Right slider drives servo
+			driveServo(-(game->sliderPos*2-100));	// 0-100 -> -100-100
+
+			// Trigger solenoid once per joystick button click
 			if (game->flags.jButtonPressed && !prevFlags->jButtonPressed)
 				triggerSolenoid();
 
+			// Every time a ball is detected
 			if (ballDetected(ball)) {
+				// Decrease lives and send status to node 1
 				if (game->lives > 0) {
 					game->lives--;
 					sendGameInfo(game);
 				}
 			}
 
+
+		// If game is OFF
 		} else {
 			driveServo(0);		// Center servo
-			writeTWI(0);		// Motor zero speed
-			
+			writeTWI(0);		// Zero motor speed
+
+			// Calibrate flag gets set from menu on node 1
 			if (game->flags.calibrate && !prevFlags->calibrate) {
 				calibrateEncoderMax();
 			}

@@ -2,7 +2,10 @@
 // Includes
 #include "motor.h"
 
+// Globals
 int16_t encoderMax = 0;
+
+// Initializes motor encoder
 void initMotor(void) {
 	// Initializes Serial Interface TWI/I2C
 	setBit(TWCR, TWEN);			// Enable 2-wire Serial Interface (SCL, SDA)
@@ -101,7 +104,7 @@ void resetEncoder(void) {
 	_delay_ms(20);
 }
 
-// Calibrates encoder at middle of board
+// Calibrates encoder with 0 at center of board
 int16_t calibrateEncoderMax(void) {
 	// Go to edge of rail
 	setMotorDirection(MOTOR_CW);
@@ -119,13 +122,13 @@ int16_t calibrateEncoderMax(void) {
 	int16_t max = readEncoder();
 	int16_t currentVal = max;
 
-	// Go to center
+	// Go to center of rail
 	setMotorDirection(MOTOR_CW);
 	writeTWI(80);
 	while (currentVal >= max/2) {
 		currentVal = readEncoder();
 	}
-	writeTWI(0);	// Stop
+	writeTWI(0);	// Stop at center
 
 	resetEncoder();
 	return max;

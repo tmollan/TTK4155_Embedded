@@ -2,23 +2,17 @@
 // Includes
 #include "ADC.h"
 
+// Initializes AD Converter
 void initADC(void) {
-	// Pin for reading IR value
-	makeInput(DDRF, PINF0);
+	makeInput(DDRF, PINF0);		// Pin for reading IR value
 
-	setBit(ADCSRA, ADATE);
-	setBit(ADMUX, REFS0);
-
-	// Left adjustment (for only reading 8-bit)
-	setBit(ADMUX, ADLAR);
-
-	// Enable ADC
-	setBit(ADCSRA, ADEN);
-
-	// Start A2D conversions
-	setBit(ADCSRA, ADSC);	// Can be removed because of ADATE?
+	setBit(ADCSRA, ADATE);		// Enable auto conversion triggering
+	setBit(ADMUX, REFS0);		// Voltage reference for ADC
+	setBit(ADMUX, ADLAR);		// Left adjustment (for only reading 8-bit)
+	setBit(ADCSRA, ADEN);		// Enable ADC
+	setBit(ADCSRA, ADSC);		// Start A2D conversions
 }
 
 uint8_t readADC(void) {
-	return ADCH;
+	return ADCH;	// Sufficient to read only high byte when left adjusted
 }

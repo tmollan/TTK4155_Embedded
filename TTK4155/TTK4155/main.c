@@ -33,19 +33,15 @@ int main(void) {
 
 	printf("Initializing...\n");
 
-	initUART(MYUBRR);		// Initializes UART communication
-
-	initSRAM();				// Initializes extern SRAM
-	//testSRAM();				// Verifies that SRAM IC is working properly
-
-	initJoystick();			// Initialize (and calibrate) joystick
-
-	initOLED();				// Initializes OLED
+	initUART(MYUBRR);		// Computer comm.
+	initSRAM();				// Extern SRAM
+	//testSRAM();				// Verifies that SRAM is working properly
+	initJoystick();			// Initializes (and calibrates) joystick
+	initOLED();
+	initCAN(MODE_NORMAL);	// Node 2 CAN bus comm.
 
 	menupage *currentMenu = malloc(sizeof(menupage));
 	initMenu(&currentMenu);
-
-	initCAN(MODE_NORMAL);
 
 	gameInfo *game = malloc(sizeof(gameInfo));
 	initGame(game);
@@ -53,16 +49,18 @@ int main(void) {
 	menupage *gameMenu = malloc(sizeof(menupage));
 	initGameMenu(&gameMenu);
 
+
+	// Main loop
 	while (1) {
 
 		// If menu mode is active
 		if (menuMode) {
 			navigateMenu(&currentMenu);
 
-		// Run application
+
+		// If not in menu mode
 		} else {
 			switch (currentApp) {
-
 
 				// Ping-pong game
 				case APP_GAME:
@@ -84,19 +82,23 @@ int main(void) {
 							} else if (game->lives == 0) {
 								endGame(game, gameMenu);
 							}
-							
+
 							sendGameInfo(game);
 					}
 					break;
-				
+
+				// Calibrates motor encoder and returns to game menu
 				case APP_ENCODERCAL:
+					// Send calibrate flag once
 					game->flags.calibrate = 1;
 					sendGameInfo(game);
 					game->flags.calibrate = 0;
+
 					gotoGameApp();
 					loadMenu(currentMenuIndex, gameMenu);
 					break;
 
+				// Sets game difficulty and returns to game menu
 				case APP_GAMEDIFF:
 					setDifficulty(game, currentMenuIndex);
 					drawCheckMark();
@@ -104,11 +106,13 @@ int main(void) {
 					loadMenu(currentMenuIndex, gameMenu);
 					break;
 
+				// Starts a new game
 				case APP_NEWGAME:
 					startGame(game);
 					gotoGameApp();
 					break;
 
+				// Exits game menu and enters main menu mode
 				case APP_EXITGAME:
 					exitGame(game);
 					exitApp(currentMenu);
@@ -119,17 +123,20 @@ int main(void) {
 
 				// Drawing on OLED with joystick
 				case APP_DRAW:
+					// Clear display on button press
 					if (buttonPressed(JOYSTICK)) clearDisplaySRAM();
+
 					drawJoystickSRAM();
 					refreshOLED();
 					_delay_ms(25);	// Speed of drawing
 
+					// Return to menu on button press
 					if (buttonPressed(LEFTBUTTON)) exitApp(currentMenu);
 					break;
 
 
 
-				// Joystick calibration procedure
+				// Initiate calibrate joystick procedure and return to menu
 				case APP_CALIBRATE:
 					calibrateJoystick();
 					drawCheckMark();
@@ -138,55 +145,16 @@ int main(void) {
 
 
 
-				// Changes font on OLED
+				// Sets a new font and returns to menu
 				case APP_FONTSIZE:
 					setFont(currentMenuIndex);
 					exitApp(currentMenu);
 					break;
 
 
+				// If there is no current application running
 				default: printf("No active apps. %d\n", (int8_t)currentApp);
 			}
 		}
-
-		/*
-		// For read- and write-test of SRAM
-		uint16_t address = 0x000;			// 0x000-0x800 (2048 addresses)
-		uint8_t writeData, readData;		// 0x00-0xFF (0-255)
-		*/
-
-
-		/*// CAN test
-		CANmessage myMessage;
-		myMessage.id = 0x0123;		// Max 0x07ef
-		myMessage.length = 5;
-		for (int i = 0, n = 1; i < myMessage.length; i++, n++) {
-			myMessage.dataBytes[i] = n;
-		}
-
-		printf("Before transmit:\nID: %.4x\nlength: %d\n\n", myMessage.id, myMessage.length);
-		transmitCAN(myMessage);
-		_delay_ms(500);
-		CANmessage recMessage = receiveCAN();
-		printf("After transmit:\nID: %.4x\nlength: %d\n\n", recMessage.id, recMessage.length);
-
-		for (int i = 0; i < recMessage.length; i++) {
-			printf("%d", recMessage.dataBytes[i]);
-		}*/
-
-		/*
-		// Text entered should return
-		input = receiveUART();			// Remember to declare variable
-		printf("%c", input);
-		*/
-
-		/*
-		// Read- and write-test of SRAM
-		writeData = receiveUART();			// Reads UART for data to save
-		writeSRAM(address, writeData);		// Write to SRAM
-		readData = readSRAM(address);		// Read from SRAM
-		printf("%c", readData);				// Print received data
-		*/
-
 	}
 }

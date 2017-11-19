@@ -31,15 +31,16 @@ typedef enum {
     FEEDBACK
 } controllerMode;
 
+// Struct for PID controller parameters
 typedef struct {
     controllerMode mode;
-    int16_t pGain;
-    int16_t iGain;
-    int16_t dGain;
-    int32_t sumError;
+    int16_t pGain;              // Kp
+    int16_t iGain;              // Ki
+    int16_t dGain;              // Kd
+    int32_t sumError;           // sum[e(0..k)]
     int16_t maxError;
     int32_t maxSumError;
-    int16_t prevProcessValue;
+    int16_t prevProcessValue;   // y(k-1)
 } PIDcontroller;
 
 
